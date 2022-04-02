@@ -1,0 +1,101 @@
+/**{
+    cursor:url(../img/coche.svg),auto !important;
+}*/
+
+body{
+    background-color: #fffafb !important;
+}
+
+select{
+    height: 55px;
+}
+
+textarea{
+    resize: none;
+}
+
+/* OCULTAR FLECHAS INPUT NUMBER */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* DESPLEGABLE AYUDA desactivar click en pc */
+.dropdown:hover>.dropdown-menu{
+    display: block;
+}
+@media only screen and (min-width: 600px){
+    #nav-ayuda{
+        pointer-events: none !important;
+    }
+}
+
+hr{
+    background-color: #051014;
+}
+.hr-light{
+    background-color: #fffafb;
+}
+.hralt{
+    background-color: #7de2d1;
+}
+a{
+    text-decoration: none;
+}
+p,.h1,.h2,.h3{
+    font-family: 'Open Sans', sans-serif;
+}
+.fondo{
+    background: rgb(125,226,209);
+    background: radial-gradient(circle, rgba(125,226,209,0.5242296747800683) 54%, rgba(255,250,251,0.9780111873851103) 100%); 
+}
+/* Lista azul */
+.li1{
+    background-color: #68DECA;
+    color: #051014;
+    font-family: 'Open Sans', sans-serif;
+}
+.li2{
+    background-color: #7de2d1;
+    color: #051014;
+    font-family: 'Open Sans', sans-serif;
+}
+.list-group-item.li1,.list-group-item.li2{
+    border: 0px;
+}
+/* ayuda.php */
+@media only screen and (min-width: 768px){
+    .col-alt{
+        width: 20%;
+    }
+}
+@media only screen and (min-width: 768px){
+    .col-alt2{
+        width: 79%;
+    }
+}
+
+/* BOTON IR ARRIBA */
+#bIrArriba {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+  z-index: 99;
+  border: 1px solid #fffafb0e;
+  outline: none;
+  background-color: #051014;
+  cursor: pointer;
+  padding: 13px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+#bIrArriba:hover {
+  background-color: #68DECA;
+}
