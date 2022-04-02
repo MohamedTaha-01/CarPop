@@ -5,22 +5,24 @@ const router = express.Router();
 
 /**
  * * ROUTING
- * / /index /index.html
+ * / /index
+ * /alquilar
  * resto error 404
  */
 
-router.get(/\/((index)|(index\.html))?/, (req,res) => {
+router.get(/(\/$)|(\/index)/m, (req,res) => {
 
-    res.status(200).sendFile(path.resolve(__dirname,'./vista/index.ejs'));
+    res.render(__dirname+'/vista/index');
 });
-router.get('alquilar.html', (req,res) => {
 
-    res.status(200).sendFile(path.resolve(__dirname,'./vista/alquilar.html'));
+router.get('/alquilar', (req,res) => {
+
+    res.render(__dirname+'/vista/alquilar');
 });
 
 router.all('*', (req,res) => {
 
-    res.status(404).sendFile(path.resolve(__dirname,'./vista/404.html'));
+    res.render(__dirname+'/vista/404');
 });
 
 module.exports = router;
