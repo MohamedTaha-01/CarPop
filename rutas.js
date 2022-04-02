@@ -12,17 +12,17 @@ const router = express.Router();
 
 router.get(/(\/$)|(\/index)/m, (req,res) => {
 
-    res.render(__dirname+'/vista/index');
+    res.status(200).render(__dirname+'/vista/index');
 });
 
 router.get('/alquilar', (req,res) => {
 
-    res.render(__dirname+'/vista/alquilar');
+    res.status(200).render(__dirname+'/vista/alquilar');
 });
 
 router.all('*', (req,res) => {
 
-    res.render(__dirname+'/vista/404');
+    res.status(404).render(__dirname+'/vista/404');
 });
 
 module.exports = router;
