@@ -25,6 +25,13 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+/* LOGO NAVBAR */
+.logo{
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 50% !important;
+}
+
 /* DESPLEGABLE AYUDA desactivar click en pc */
 .dropdown:hover>.dropdown-menu{
     display: block;
