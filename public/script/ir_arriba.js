@@ -19,4 +19,4 @@ function clickSubir() {
   document.body.scrollTop = 0; // Safari
   document.documentElement.scrollTop = 0; // Chrome, Firefox, IE, Opera
   window.scrollTo({top: 0, behavior: 'smooth'});
-} 
+}

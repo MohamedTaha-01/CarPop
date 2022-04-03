@@ -13,7 +13,7 @@ window.addEventListener("load", function () {
 
         let httpRequest = new XMLHttpRequest();
         httpRequest.addEventListener("readystatechange", recibirMarcas);
-        httpRequest.open("GET","recursos/json/marcas.json");
+        httpRequest.open("GET","./public/json/marcas.json");
         httpRequest.setRequestHeader("Content-Type", "application-json");
         httpRequest.send();
     }
@@ -52,7 +52,7 @@ window.addEventListener("load", function () {
 
         let httpRequest2 = new XMLHttpRequest();
         httpRequest2.addEventListener("readystatechange", recibirMunicipios);
-        httpRequest2.open("GET","recursos/json/modelos.json");
+        httpRequest2.open("GET","./public/json/modelos.json");
         httpRequest2.setRequestHeader("Content-Type", "application-json");
         httpRequest2.send();
     }
