@@ -36,14 +36,46 @@
     <div class="p-2 container pt-5">
         <div class="row pt-5">
             <!-- FILTROS -->
-            <div class="col-2 p-4 border border-start-0 rounded rounded-5 border-secondary">
+            <div class="col-12 col-lg-2 p-4 border border-start-0 rounded rounded-5 border-secondary">
                 <div class="row p-1">
                     <div class="col"><div class="h3">Filtros</div></div>
                 </div>
-                <div class="row p-1 mt-4">
-                    <div class="col">
-                    a
-                    a
+                <div class="row p-1 mt-2">
+                    <div class="col d-flex flex-column">
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Marca</label>
+                            <select class="form-select">
+                                <option selected>Marca</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-select">
+                                <option selected>Modelo</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Combustible</label>
+                            <select class="form-select">
+                                <option selected>Combustible</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Transmisión</label>
+                            <select class="form-select">
+                                <option selected>Transmisión</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label for="rango-precio-max" class="form-label">Precio máximo: <span id="outPrecio"></span></label>
+                            <input type="range" class="form-range" value="1" min="1" max="500" step="1" id="rango-precio-max">
+                        </fieldset>
+                        <script>
+                            let rango = document.getElementById("rango-precio-max");
+                            rango.addEventListener("input", function(){
+                                document.getElementById("outPrecio").innerHTML = this.value+'€';
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -52,11 +84,11 @@
                 <div class="vr h-100 bg-info"></div>
             </div>  -->
             <!-- ANUNCIOS -->
-            <div class="col-10 p-4 mb-2 ps-5">
+            <div class="col-12 col-lg-10 p-4 mb-2 ps-md-5">
                 <div class="row p-1 ps-5">
                     <div class="col"><div class="h3">Anuncios</div></div>
                 </div>
-                <div class="row p-1 mt-4 ps-5">
+                <div class="row p-1 mt-4 ps-md-5">
                     <div class="col">
                         <div class="card mb-3 w-100">
                             <div class="row g-0">
