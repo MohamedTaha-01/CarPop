@@ -38,6 +38,11 @@ router.get('/iniciar_sesion', (req,res) => {
     res.status(200).render(__dirname+'/vista/iniciar_sesion');
 });
 
+router.get('/api/alquilar', (req,res) => {
+
+    res.status(200).json(__dirname+'/public/test/anuncios.json');
+});
+
 router.all('*', (req,res) => {
 
     res.status(404).render(__dirname+'/vista/404');

@@ -1,0 +1,41 @@
+[
+    {
+        "id_anuncio": 1,
+        "id_usuario": 2,
+        "titulo": "Seat León Cupra TSI 2.0 290cv",
+        "descripcion": "Seat León Cupra año 2020, muy cuidado. Dispone de Etiqueta ambiental C. Prohibido fumar en su interior.",
+        "img": "null",
+        "matricula": "4723CLA",
+        "marca": "Seat",
+        "modelo": "León",
+        "combustible": "Gasolina",
+        "transmisión": "Manual",
+        "precio": 32
+    },
+    {
+        "id_anuncio": 2,
+        "id_usuario": 2,
+        "titulo": "Anuncio 2 clio",
+        "descripcion": "Seat terior.",
+        "img": "null",
+        "matricula": "4533KSS",
+        "marca": "Renault",
+        "modelo": "Clio",
+        "combustible": "Gasolina",
+        "transmisión": "Automático",
+        "precio": 12
+    },
+    {
+        "id_anuncio": 3,
+        "id_usuario": 1,
+        "titulo": "Anuncio 3",
+        "descripcion": "Descripciooooooooooooon",
+        "img": "null",
+        "matricula": "4357FFR",
+        "marca": "Marca",
+        "modelo": "Modelo",
+        "combustible": "Diésel",
+        "transmisión": "Manual",
+        "precio": 14
+    }
+]
