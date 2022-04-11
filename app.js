@@ -5,15 +5,13 @@ const mongoose = require('mongoose');
 const app = express();
 const puerto = process.env.PORT || 5000;
 
-/**
- * * Middleware
- * cargar recursos public
- * establecer render para ejs
- * cargar html y ejs 
- */
+// establecer ruta plantillas ejs y motor de render
+app.set('view engine', 'ejs');
+app.set('/vista', express.static(__dirname + '/vista'));
+
+// cargar recursos public
 app.use('/public', express.static(__dirname + '/public'));
 
-app.set('view engine', 'ejs');
 app.use('/', ruta);
 
 /**

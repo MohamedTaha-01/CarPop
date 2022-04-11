@@ -1,11 +1,13 @@
 const express = require('express');
-const path = require('path');
-
 const router = express.Router();
+const path = require('path');
+const datos = {};
+datos.anuncios = require('./modelo/anuncios.json');
+datos.usuarios = require('./modelo/usuarios.json');
 
 /**
  * * ROUTING
- * / /index
+ * /
  * /alquilar
  * /crear_anuncio
  * /registrarse
@@ -13,15 +15,37 @@ const router = express.Router();
  * resto error 404
  */
 
-router.get(/(\/$)|(\/index)/m, (req,res) => {
+router.get('/', (req,res) => {
 
     res.status(200).render(__dirname+'/vista/index');
 });
 
+router.route('/alquilar')
+    .get((req,res) => {
+        
+        res.status(200).render(__dirname+'/vista/alquilar', datos)
+        // res.json(datos.anuncios);
+    })
+    .post((req,res) => {
+        
+    });
+
+router.route('/alquilar/:id')
+    .get((req,res) => {
+            
+        let inIdUsuario = req.params.id;
+        if(inIdUsuario){
+            datos.anuncios = datos.anuncios.filter(anuncio => anuncio.id_usuario==inIdUsuario);
+        }
+        res.status(200).render(__dirname+'/vista/alquilar', datos)
+        // res.json(datos.anuncios);
+    })
+
+/*
 router.get('/alquilar', (req,res) => {
 
     res.status(200).render(__dirname+'/vista/alquilar');
-});
+});*/
 
 router.get('/crear_anuncio', (req,res) => {
 
@@ -38,14 +62,10 @@ router.get('/iniciar_sesion', (req,res) => {
     res.status(200).render(__dirname+'/vista/iniciar_sesion');
 });
 
-router.get('/api/alquilar', (req,res) => {
-
-    res.status(200).json(__dirname+'/public/test/anuncios.json');
-});
-
 router.all('*', (req,res) => {
 
     res.status(404).render(__dirname+'/vista/404');
+    console.log("404");
 });
 
 module.exports = router;
