@@ -13,7 +13,7 @@ window.addEventListener("load", function () {
 
         let httpRequest = new XMLHttpRequest();
         httpRequest.addEventListener("readystatechange", recibirMarcas);
-        httpRequest.open("GET","./public/json/marcas.json");
+        httpRequest.open("GET","/json/marcas.json");
         httpRequest.setRequestHeader("Content-Type", "application-json");
         httpRequest.send();
     }
@@ -28,7 +28,8 @@ window.addEventListener("load", function () {
                 oMarcas.forEach(marca => {
                     option = document.createElement("option");
                     let txtMarca = document.createTextNode(marca.nombre);
-                    option.setAttribute("value", marca.id)
+                    option.setAttribute("value", marca.nombre);
+                    option.setAttribute("nmarca", marca.id);
                     option.appendChild(txtMarca);
                     listaMarcas.appendChild(option);
                 });
@@ -45,14 +46,15 @@ window.addEventListener("load", function () {
 
     function cargarModelos(){
 
-        idMarca = listaMarcas.value;
-        if(idMarca=='0'){
+        idMarca = listaMarcas.options[listaMarcas.selectedIndex].getAttribute("nmarca");
+        console.log(idMarca);
+        if(idMarca=='0' || idMarca==null){
             marcaSeleccionada = false;
         } else marcaSeleccionada = true;
 
         let httpRequest2 = new XMLHttpRequest();
         httpRequest2.addEventListener("readystatechange", recibirMunicipios);
-        httpRequest2.open("GET","./public/json/modelos.json");
+        httpRequest2.open("GET","/json/modelos.json");
         httpRequest2.setRequestHeader("Content-Type", "application-json");
         httpRequest2.send();
     }
@@ -80,8 +82,10 @@ window.addEventListener("load", function () {
                 // activar/desactivar campo
                 if(marcaSeleccionada){
                     listaModelos.removeAttribute("disabled");
+                    console.log("marca seleccionada");
                 } else {
                     listaModelos.setAttribute("disabled","");
+                    console.log("marca NO seleccionada");
                 }
 
                 // crear options modelos

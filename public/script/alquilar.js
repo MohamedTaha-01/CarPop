@@ -2,6 +2,8 @@ let divFiltros = document.getElementById("div-filtros");
 let rangoMin = document.getElementById("rango-precio-min");
 let rangoMax = document.getElementById("rango-precio-max");
 
+document.getElementById("btn-recargar").addEventListener("click", ()=> location.reload());
+
 // animacion filtros
 divFiltros.addEventListener("mouseover", function(){
     divFiltros.classList.add("filtros");

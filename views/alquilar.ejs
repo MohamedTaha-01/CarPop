@@ -3,7 +3,7 @@
 <%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Alquilar'}) %>
 <body>
 
-    <header><%- include('../vista/nav.ejs'); %></header>
+    <header><%- include('./plantilla/nav.ejs'); %></header>
     
     <div class="p-2 container py-5">
         <div class="row pt-5">
@@ -56,31 +56,36 @@
             <!-- ANUNCIOS -->
             <div class="col-12 col-lg-9 p-4 mb-2 ps-md-5">
                 <div class="row p-1 ps-5">
-                    <div class="col"><div class="h3">Anuncios</div></div>
+                    <div class="col d-flex flex-row justify-content-between">
+                        <div class="h3">Anuncios</div>
+                        <button class="btn btn-primary btn-block " id="btn-recargar">
+                            <span class="text-light">Actualizar</span> <img src="/img/google/refresh.svg">
+                        </button>
+                    </div>
                 </div>
                 <div class="row p-1 mt-4 ps-md-5">
                     <div class="col">
-                        <% anuncios.forEach(anuncio => { %>
+                        <% // anuncios.forEach(anuncio => { %>
                             <div class="card mb-3 w-100">
                                 <div class="row g-0">
                                     <div class="col-md-4">
-                                        <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100" style="width: 290px !important; height: 179px !important;" draggable="false">
+                                        <img src="<%= // anuncio.img %>" class="img-fluid rounded-start w-100 h-100" style="width: 290px !important; height: 179px !important;" draggable="false">
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h5 class="card-title"><%= anuncio.titulo %><span class="float-end "><%= anuncio.precio %>€/h</span></h5>
-                                            <p class="card-text"><%= anuncio.descripcion %></p>
+                                            <h5 class="card-title"><%= //anuncio.titulo %><span class="float-end "><%= //anuncio.precio %>€/h</span></h5>
+                                            <p class="card-text"><%= //anuncio.descripcion %></p>
                                             <p class="card-text">
-                                                <span class="badge bg-secondary me-2"><%= anuncio.combustible %></span>
-                                                <span class="badge bg-secondary me-2"><%= anuncio.transmision %></span>
-                                                <span class="badge bg-secondary me-2">Id anuncio: <%= anuncio.id_anuncio %></span>
-                                                <span class="badge bg-secondary me-2">Id usuario: <%= anuncio.id_usuario %></span>
+                                                <span class="badge bg-secondary me-2"><%= //anuncio.combustible %></span>
+                                                <span class="badge bg-secondary me-2"><%= //anuncio.transmision %></span>
+                                                <span class="badge bg-secondary me-2">Id anuncio: <%= //anuncio.id_anuncio %></span>
+                                                <span class="badge bg-secondary me-2">Id usuario: <%= //anuncio.id_usuario %></span>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <% }); %>
+                        <% //}); %>
                     </div>
                 </div>
             </div>
@@ -89,8 +94,8 @@
     
     <footer><%- include('./plantilla/pie'); %></footer>
 
-    <script src="./public/script/alquilar.js"></script>
-    <script src="./public/script/ir_arriba.js"></script>
+    <script src="/script/alquilar.js"></script>
+    <script src="/script/ir_arriba.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

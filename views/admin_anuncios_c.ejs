@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Crear anuncio'}) %>
+<body class="bg-info">
+
+    <section class="container-fluid text-center text-sm-start align-items-center">
+        <div class="row bg-dark">
+            <div class="col">
+                <div class="container text-light text-center">
+                    <header class="d-flex justify-content-center py-3">
+                        <ul class="nav">
+                            <li class="nav-item"><a href="/admin/anuncios" class="nav-link link-light" id="admin-inicio">Volver a anuncios</a></li>
+                        </ul>
+                    </header>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-light m-2 my-3">
+            <div class="col">
+                <div class="container">
+                    <form action="/admin" method="POST" class="p-3 needs-validation" novalidate>
+                        <fieldset class="p-2">
+                            <div class="row justify-content-center pb-3 px-2">
+                                <div class="col text-center align-self-center">
+                                    <div class="h3 text-dark">Crear anuncio</div>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="titulo" id="in-titulo" placeholder="" required>
+                                        <label for="in-titulo">Título</label>
+                                        <div class="invalid-feedback d-none" id="err-titulo-vacio">
+                                            Debes escribir un título
+                                        </div>
+                                        <div class="invalid-feedback d-none" id="err-titulo-caracteres">
+                                            El título debe tener entre 3 y 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="form-floating">
+                                        <textarea class="form-control h-100" id="in-descripcion" name="descripcion" rows="9" placeholder="" required></textarea>
+                                        <label for="in-descripcion">Descripción</label>
+                                        <div class="invalid-feedback d-none" id="err-desc-caracteres">
+                                            La descripción debe tener entre 3 y 300 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="">
+                                        <input class="form-control" type="file" id="in-imagen" name="img">
+                                    </div>
+                                </div>
+                            </div>    
+                        </fieldset>
+                        <fieldset class="p-2">
+                            <div class="form-text text-center">Vehículo</div>
+                            <div class="row g-3 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="matricula" id="in-matricula" placeholder="" required>
+                                        <label for="in-matricula">Matrícula</label>
+                                        <div class="invalid-feedback d-none" id="err-matricula">
+                                            Introduce una matrícula válida
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <select class="form-select" id="lista-marcas" name="marca">
+                                        <option selected value="0">Seleccionar marca</option>
+                                    </select>
+                                </div>
+                                <div class="col text-center align-self-center text-dark">
+                                    <select class="form-select" id="lista-modelos" name="modelo" disabled>
+                                        <option selected value="0">Seleccionar modelo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <select class="form-select" id="lista-combustibles" name="combustible">
+                                        <option value="0">Seleccionar combustible</option>
+                                        <option value="Gasolina">Gasolina</option>
+                                        <option value="Diésel">Diésel</option>
+                                        <option value="Eléctrico">Eléctrico</option>
+                                        <option value="Híbrido">Híbrido</option>
+                                    </select>
+                                </div>
+                                <div class="col text-center align-self-center text-dark">
+                                    <select class="form-select" id="lista-transmisiones" name="transmision">
+                                        <option value="0">Seleccionar transmisión</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="Automático">Automático</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="p-2">
+                            <div class="form-text text-center">Detalles anuncio</div>
+                            <div class="row g-3 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" name="precio" id="in-precio" placeholder="" required>
+                                        <label for="in-precio">Precio por hora</label>
+                                        <div class="invalid-feedback d-none" id="err-precio">
+                                            Debes introducir un número entre 1 y 999.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="d-none">
+                            <div class="row g-3 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <input type="datetime" name="creado" id="in-fecha" placeholder="" required>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="p-2">
+                            <div class="row justify-content-center p-2">
+                                <div class="col text-center align-self-center">
+                                    <button type="submit" class="btn btn-primary w-50 p-3">
+                                        Publicar anuncio
+                                    </button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/script/cargar_coches.js"></script>
+    <script src="/script/crear_anuncio.js"></script>
+
+</body>
+</html>
