@@ -25,7 +25,7 @@ router.get('/anuncios/crear', (req, res)=>{
     res.render("admin_anuncios_c");
 });
 // crear anuncio
-router.post('/', async(req,res)=>{
+router.post('/anuncios', async(req,res)=>{
 
     const body = req.body;
     try {
