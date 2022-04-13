@@ -24,6 +24,7 @@ router.get('/anuncios', async (req, res)=>{
 router.get('/anuncios/crear', (req, res)=>{
     res.render("admin_anuncios_c");
 });
+// crear anuncio
 router.post('/', async(req,res)=>{
 
     const body = req.body;
@@ -33,6 +34,16 @@ router.post('/', async(req,res)=>{
         res.redirect('/admin/anuncios');
     } catch (error) {
         console.log(error);
+    }
+});
+router.get('/anuncios/:id_anuncio', async(req,res)=>{
+
+    const id_anuncio = req.params.id_anuncio;
+    try {
+        const anuncioDB = await Anuncio.findById(id_anuncio);
+        res.render("admin_anuncios_e", {anuncio: anuncioDB, error: false});
+    } catch (e) {
+        res.render("admin_anuncios_e", {error: true, mensaje: "No se ha encontrado el anuncio especificado"});
     }
 });
 
