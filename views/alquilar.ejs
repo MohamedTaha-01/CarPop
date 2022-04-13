@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Alquilar'}) %>
+<body>
+
+    <header><%- include('./plantilla/nav.ejs'); %></header>
+    
+    <div class="p-2 container py-5">
+        <div class="row pt-5">
+            <!-- FILTROS -->
+            <div class="col-12 col-lg-3 p-4" id="div-filtros">
+                <div class="row p-1">
+                    <div class="col"><div class="h3">Filtros</div></div>
+                </div>
+                <div class="row p-1 mt-2">
+                    <div class="col d-flex flex-column">
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Marca</label>
+                            <select class="form-select">
+                                <option selected>Marca</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-select">
+                                <option selected>Modelo</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Combustible</label>
+                            <select class="form-select">
+                                <option selected>Combustible</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label class="form-label">Transmisión</label>
+                            <select class="form-select">
+                                <option selected>Transmisión</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label for="rango-precio-min" class="form-label">Precio mínimo: <span id="out-precio-min">No</span></label>
+                            <input type="range" class="form-range slider" value="0" min="0" max="500" step="1" id="rango-precio-min">
+                        </fieldset>
+                        <fieldset class="d-flex flex-column p-2">
+                            <label for="rango-precio-max" class="form-label">Precio máximo: <span id="out-precio-max">No</span></label>
+                            <input type="range" class="form-range slider" value="0" min="0" max="500" step="1" id="rango-precio-max">
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <!-- BARRA LATERAL 
+            <div class="col-1 text-center">
+                <div class="vr h-100 bg-info"></div>
+            </div>  -->
+            <!-- ANUNCIOS -->
+            <div class="col-12 col-lg-9 p-4 mb-2 ps-md-5">
+                <div class="row p-1 ps-5">
+                    <div class="col d-flex flex-row justify-content-between">
+                        <div class="h3">Anuncios</div>
+                        <button class="btn btn-primary btn-block " id="btn-recargar">
+                            <span class="text-light">Actualizar</span> <img src="/img/google/refresh.svg">
+                        </button>
+                    </div>
+                </div>
+                <div class="row p-1 mt-4 ps-md-5">
+                    <div class="col">
+                        <% // anuncios.forEach(anuncio => { %>
+                            <div class="card mb-3 w-100">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src="<%= // anuncio.img %>" class="img-fluid rounded-start w-100 h-100" style="width: 290px !important; height: 179px !important;" draggable="false">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><%= //anuncio.titulo %><span class="float-end "><%= //anuncio.precio %>€/h</span></h5>
+                                            <p class="card-text"><%= //anuncio.descripcion %></p>
+                                            <p class="card-text">
+                                                <span class="badge bg-secondary me-2"><%= //anuncio.combustible %></span>
+                                                <span class="badge bg-secondary me-2"><%= //anuncio.transmision %></span>
+                                                <span class="badge bg-secondary me-2">Id anuncio: <%= //anuncio.id_anuncio %></span>
+                                                <span class="badge bg-secondary me-2">Id usuario: <%= //anuncio.id_usuario %></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% //}); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer><%- include('./plantilla/pie'); %></footer>
+
+    <script src="/script/alquilar.js"></script>
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 let bIrArriba = document.createElement("button");
 bIrArriba.setAttribute("id","bIrArriba");
 bIrArriba.setAttribute("title","Ir arriba");
-bIrArriba.innerHTML = '<img src="recursos/img/google/arrow_upward.svg"></img>';
+bIrArriba.innerHTML = '<img src="./img/google/arrow_upward.svg"></img>';
 
 document.getElementsByTagName("body")[0].appendChild(bIrArriba);
 
@@ -19,4 +19,4 @@ function clickSubir() {
   document.body.scrollTop = 0; // Safari
   document.documentElement.scrollTop = 0; // Chrome, Firefox, IE, Opera
   window.scrollTo({top: 0, behavior: 'smooth'});
-} 
+}

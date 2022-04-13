@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Admin. anuncios'}) %>
+<body class="bg-info">
+
+    <section class="container-fluid text-center text-sm-start align-items-center">
+        <div class="row bg-dark">
+            <div class="col">
+                <div class="container">
+                    <%- include('./plantilla/admin_nav') %> 
+                </div>
+            </div>
+        </div>
+        <div class="row bg-light m-2 my-3">
+            <div class="col p-2">
+                <div class="bg-light px-1 table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Anuncio/Usuario</th>
+                                <th scope="col">Título</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Matrícula</th>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Modelo</th>
+                                <th scope="col">Combustible</th>
+                                <th scope="col">Transmisión</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Creado</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (anuncios.length>0) { %>
+                                <% anuncios.forEach(anuncio => { %>
+                                    <tr>
+                                        <td><%= anuncio._id+' / '+anuncio.id_usuario%></td>
+                                        <td><%= anuncio.titulo %></td>
+                                        <td><%= anuncio.descripcion %></td>
+                                        <td><%= anuncio.matricula %></td>
+                                        <td><%= anuncio.marca %></td>
+                                        <td><%= anuncio.modelo %></td>
+                                        <td><%= anuncio.combustible %></td>
+                                        <td><%= anuncio.transmision %></td>
+                                        <td><%= anuncio.precio %></td>
+                                        <td><%= anuncio.creado %></td>
+                                        <td class="text-center align-middle">
+                                            <button class="btn btn-primary"><img src="/img/google/edit.svg"></button>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="11" class="text-center align-middle">
+                                    <a class="btn btn-primary btn-block w-50" href="/admin/anuncios/crear">Crear anuncio</a>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

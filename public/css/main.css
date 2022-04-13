@@ -14,6 +14,19 @@ textarea{
     resize: none;
 }
 
+/* Sliders */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #7de2d1;
+    cursor: pointer;
+}
+  
+.slider::-moz-range-thumb {
+    background: #7de2d1;
+    cursor: pointer;
+}
+
 /* OCULTAR FLECHAS INPUT NUMBER */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
@@ -23,6 +36,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* LOGO NAVBAR */
+.logo{
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 50% !important;
 }
 
 /* DESPLEGABLE AYUDA desactivar click en pc */
@@ -50,10 +70,7 @@ a{
 p,.h1,.h2,.h3{
     font-family: 'Open Sans', sans-serif;
 }
-.fondo{
-    background: rgb(125,226,209);
-    background: radial-gradient(circle, rgba(125,226,209,0.5242296747800683) 54%, rgba(255,250,251,0.9780111873851103) 100%); 
-}
+
 /* Lista azul */
 .li1{
     background-color: #68DECA;
@@ -98,4 +115,12 @@ p,.h1,.h2,.h3{
 
 #bIrArriba:hover {
   background-color: #68DECA;
+}
+
+/* Alquilar.ejs */
+.filtros{
+    -webkit-box-shadow: 5px 0px 35px 5px rgba(0,0,0,0.6); 
+    box-shadow: 5px 0px 35px 5px rgba(0,0,0,0.6);
+    position: relative;
+    top: -5px;
 }
