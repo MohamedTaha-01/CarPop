@@ -11,7 +11,6 @@ window.addEventListener("load", function(){
     let sTransmisiones = document.getElementById("lista-transmisiones");
     let inPrecio = document.getElementById("in-precio");
     let inFecha = document.getElementById("in-fecha");
-    let valido=true;
 
     inTitulo.addEventListener("focusout", validarTitulo);
     inDescripcion.addEventListener("focusout", validarDescripcion);
