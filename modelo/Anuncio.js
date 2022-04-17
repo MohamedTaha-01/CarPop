@@ -12,7 +12,7 @@ const anuncioSchema = new Schema({
     combustible: String,
     transmision: String,
     precio: Number,
-    creado: String
+    creado: Date
 });
 
 const Anuncio = mongoose.model('Anuncio', anuncioSchema);
