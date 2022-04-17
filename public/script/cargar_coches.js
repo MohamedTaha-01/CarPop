@@ -5,9 +5,25 @@ window.addEventListener("load", function () {
     let option;
     let idMarca;
     let marcaSeleccionada;
+    let editandoAnuncio = false;
+
+    // si el parametro marcaanuncio tiene una marca (carga desde la bbdd al editar un anuncio)
+    let marcaAn = listaMarcas.dataset.marcaanuncio;
+    if(marcaAn != undefined && marcaAn != null && marcaAn != ''){
+        var modeloAn = listaModelos.dataset.modeloanuncio;
+        editandoAnuncio=true;
+    }
 
     cargarMarcas();
-    listaMarcas.addEventListener("change", cargarModelos);
+
+    if (editandoAnuncio) cargarModelos(); // fuerza la carga de modelos si se está editando un anuncio
+    
+    listaMarcas.addEventListener("change", ()=>{
+        /* después de primera ejecución del script con editandoAnuncio=true para cargar las opciones seleccionadas desde bbdd,
+        se desactiva para permitir funcionamiento normal */
+        editandoAnuncio=false; 
+        cargarModelos();
+    });
 
     function cargarMarcas(){
 
@@ -30,40 +46,48 @@ window.addEventListener("load", function () {
                     let txtMarca = document.createTextNode(marca.nombre);
                     option.setAttribute("value", marca.nombre);
                     option.setAttribute("nmarca", marca.id);
+                    if (editandoAnuncio) {
+                        if (marcaAn == marca.nombre) { // selecciona la marca recogida desde bbdd
+                            option.setAttribute("selected", "");
+                            idMarca = marca.id;
+                            marcaSeleccionada = true;
+                        }
+                    }
                     option.appendChild(txtMarca);
                     listaMarcas.appendChild(option);
                 });
 
             } else if(this.status == 400){
-                document.write = "Página no encontrada";
+                console.error("Página no encontrada");
             } else {
-                document.write = "Error de conexión";
+                console.error("Error de conexión");
             }
         } else if(this.readyState == 3){
-            console.log("Cargando...");
+            console.log("Cargando marcas...");
         }
     }
 
     function cargarModelos(){
 
-        idMarca = listaMarcas.options[listaMarcas.selectedIndex].getAttribute("nmarca");
-        console.log(idMarca);
+        if (!editandoAnuncio) {
+            idMarca = listaMarcas.options[listaMarcas.selectedIndex].getAttribute("nmarca"); // recoge la id de la marca seleccionada manualmente
+        }
         if(idMarca=='0' || idMarca==null){
             marcaSeleccionada = false;
         } else marcaSeleccionada = true;
 
         let httpRequest2 = new XMLHttpRequest();
-        httpRequest2.addEventListener("readystatechange", recibirMunicipios);
+        httpRequest2.addEventListener("readystatechange", recibirModelos);
         httpRequest2.open("GET","/json/modelos.json");
         httpRequest2.setRequestHeader("Content-Type", "application-json");
         httpRequest2.send();
     }
 
-    function recibirMunicipios(){
+    function recibirModelos(){
 
         if (this.readyState == 4){
             if(this.status == 200){
-
+                
                 let oModelos = JSON.parse(this.responseText);
                 
                 // eliminar todas las options
@@ -82,10 +106,10 @@ window.addEventListener("load", function () {
                 // activar/desactivar campo
                 if(marcaSeleccionada){
                     listaModelos.removeAttribute("disabled");
-                    console.log("marca seleccionada");
+                    //console.info("marca seleccionada");
                 } else {
                     listaModelos.setAttribute("disabled","");
-                    console.log("marca NO seleccionada");
+                    //console.info("marca NO seleccionada");
                 }
 
                 // crear options modelos
@@ -94,17 +118,22 @@ window.addEventListener("load", function () {
                         option = document.createElement("option");
                         let txtModelo = document.createTextNode(modelo.nombre);
                         option.appendChild(txtModelo);
+                        if (editandoAnuncio) {
+                            if (modeloAn == modelo.nombre) { 
+                                option.setAttribute("selected", ""); // selecciona el modelo cargado desde bbdd
+                            }
+                        }
                         listaModelos.appendChild(option);
                     }
                 });
 
             } else if(this.status == 400){
-                document.write = "Página no encontrada";
+                console.error("Página no encontrada");
             } else {
-                document.write = "Error de conexión";
+                console.error("Error de conexión");
             }
         } else if(this.readyState == 3){
-            console.log("Cargando...");
+            console.log("Cargando modelos...");
         }
     }
 
