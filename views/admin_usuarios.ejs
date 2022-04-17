@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Admin. usuarios'}) %>
+<body class="bg-info">
+
+    <section class="container-fluid text-center text-sm-start align-items-center">
+        <div class="row bg-dark">
+            <div class="col">
+                <div class="container">
+                    <%- include('./plantilla/admin_nav') %> 
+                </div>
+            </div>
+        </div>
+        <div class="row bg-light m-2 my-3">
+            <div class="col p-2">
+                <div class="bg-light px-1 table-responsive">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Usuario</th>
+                                <th scope="col">Nº&nbsp;anuncios</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Contraseña</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Dirección</th>
+                                <th scope="col">Administrador</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (usuarios.length>0) { %>
+                                <% usuarios.forEach(usuario => { %>
+                                    <% let contAnuncios=0; %> 
+                                    <tr>
+                                        <td><%= usuario._id %></td>
+                                        <td>
+                                            <% anuncios.forEach(anuncio => { %>
+                                                <% if (anuncio.id_usuario == usuario._id) { %>
+                                                    <% contAnuncios++; %> 
+                                                <% } %>
+                                            <% }) %>
+                                            <%= contAnuncios %> 
+                                        </td>
+                                        <td><%= usuario.nombre %></td>
+                                        <td><%= usuario.apellido %></td>
+                                        <td><%= usuario.correo %></td>
+                                        <td><%= usuario.contrasena %></td>
+                                        <td><%= usuario.telefono %></td>
+                                        <td><%= usuario.direccion %></td>
+                                        <td>
+                                            <% if (usuario.admin) { %>
+                                                <%= 'Si' %> 
+                                            <% } else { %>
+                                                <%= 'No' %>
+                                            <% }%>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <a class="btn btn-primary btn-block" href="/admin/usuarios/<%=usuario._id%>">
+                                                <img src="/img/google/edit.svg">
+                                            </a>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <button type="reset" class="btn btn-danger btn-block b-eliminar-usuario" data-id="<%= usuario.id %>">
+                                                <img src="/img/google/delete2.svg">
+                                            </button>
+                                            <!-- <button class="btn btn-danger btn-block" data-id="<%=usuario._id%>" id="b-eliminar-anuncio"></button> -->
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="11" class="text-center align-middle">
+                                    <a class="btn btn-primary btn-block w-50" href="/admin/usuarios/crear"><img src="/img/google/add.svg"></a>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script type="module">
+        import * as alertas from '/script/alertas.js';
+
+        // boton eliminar anuncio
+        let bEliminarAn = document.querySelectorAll('.b-eliminar-anuncio');
+        bEliminarAn.forEach(boton => {
+            
+            boton.addEventListener("click", async() =>{
+            let idEliminarAn = boton.dataset.id;
+            console.log("dispara");
+            try {
+                const res = await fetch(`/admin/anuncios/eliminar/${idEliminarAn}`, {method: 'DELETE'});
+                const resjson = await res.json();
+                if (resjson.eliminado) {
+                    location.reload();
+                    console.log(resjson.mensaje);
+                    alertas.info("", resjson.mensaje);
+                } else {
+                    // renderizar respuesta en DOM
+                    console.log(resjson.mensaje);
+                    alertas.info("Error", resjson.mensaje);
+                }
+            } catch (error) {
+                
+            }
+        });
+        });
+        
+    </script> -->
+
+</body>
+</html>
