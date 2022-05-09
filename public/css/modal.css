@@ -27,7 +27,7 @@
   
   .cerrar-modal:hover,
   .cerrar-modal:focus {
-    color: fffafb;
+    color: #fffafb;
     text-decoration: none;
     cursor: pointer;
   } 
