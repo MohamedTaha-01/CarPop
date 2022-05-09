@@ -65,27 +65,31 @@
                 </div>
                 <div class="row p-1 mt-4 ps-md-5">
                     <div class="col">
-                        <% // anuncios.forEach(anuncio => { %>
-                            <div class="card mb-3 w-100">
-                                <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img src="<%= // anuncio.img %>" class="img-fluid rounded-start w-100 h-100" style="width: 290px !important; height: 179px !important;" draggable="false">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><%= //anuncio.titulo %><span class="float-end "><%= //anuncio.precio %>€/h</span></h5>
-                                            <p class="card-text"><%= //anuncio.descripcion %></p>
-                                            <p class="card-text">
-                                                <span class="badge bg-secondary me-2"><%= //anuncio.combustible %></span>
-                                                <span class="badge bg-secondary me-2"><%= //anuncio.transmision %></span>
-                                                <span class="badge bg-secondary me-2">Id anuncio: <%= //anuncio.id_anuncio %></span>
-                                                <span class="badge bg-secondary me-2">Id usuario: <%= //anuncio.id_usuario %></span>
-                                            </p>
+                        <% anuncios.forEach(anuncio => { %>
+                            <a href="#">
+                                <div class="card mb-3 w-100 text-dark">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="<%= // anuncio.img %>" class="img-fluid rounded-start w-100 h-100" draggable="false">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><%= anuncio.titulo %><span class="float-end"><%= anuncio.precio %>€/h</span></h5>
+                                                <p class="card-text"><%= anuncio.descripcion %></p>
+                                                <p class="card-text">
+                                                    <span class="badge bg-secondary me-2"><%= anuncio.marca+' '+anuncio.modelo%></span>
+                                                    <span class="badge bg-secondary me-2"><%= anuncio.combustible %></span>
+                                                    <span class="badge bg-secondary me-2"><%= anuncio.transmision %></span>
+                                                </p>
+                                            </div>
+                                                <div class="card-footer text-muted">
+                                                    <%=`Creado\xa0el\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        <% //}); %>
+                            </a>
+                        <% }) %>
                     </div>
                 </div>
             </div>
