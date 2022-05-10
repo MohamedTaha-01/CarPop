@@ -1,21 +1,16 @@
-class Usuario {
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-    constructor(nombre, apellido, correo, contrasena, telefono, direccion) {
-        
-        this.id = Usuario.incrementarId()
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.contrasena = contrasena;
-        this.telefono = telefono;
-        this.direccion = direccion;
-    }
+const usuarioSchema = new Schema({
+    nombre: String,
+    apellido: String,
+    correo: String,
+    contrasena: String,
+    telefono: String,
+    direccion: String,
+    admin: Boolean
+});
 
-    static incrementarId() {
-        if (!this.ultimaId) this.ultimaId = 1;
-        else this.ultimaId++
-        return this.ultimaId
-    }
-}
+const Usuario = mongoose.model('Usuario', usuarioSchema);
 
 module.exports = Usuario;

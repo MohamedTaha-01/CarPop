@@ -18,11 +18,35 @@
         <div class="row bg-light m-2 my-3">
             <div class="col">
                 <div class="container">
-                    <form action="/admin" method="POST" class="p-3 needs-validation" novalidate>
+                    <form action="/admin/anuncios" method="POST" class="p-3 needs-validation" novalidate>
+                        <div class="row justify-content-center">
+                            <div class="col text-center">
+                                <p></p>
+                            </div>
+                        </div>
                         <fieldset class="p-2">
                             <div class="row justify-content-center pb-3 px-2">
                                 <div class="col text-center align-self-center">
                                     <div class="h3 text-dark">Crear anuncio</div>
+                                </div>
+                            </div>
+                            <div class="row g-2 justify-content-center p-2">
+                                <div class="col text-center align-self-center text-dark">
+                                    <% let stringUsuarios = ''; %>
+                                    <% let stringIdUsuarios = ''; %>
+                                    <% usuarios.forEach(usuario => { %>
+                                        <% stringUsuarios = stringUsuarios.concat(',',usuario.nombre); %>
+                                        <% stringIdUsuarios = stringIdUsuarios.concat(',',usuario._id); %>
+                                    <% }) %>
+                                    <select class="form-select" id="lista-usuarios" name="usuario" data-usuarios="<%= stringUsuarios %>" data-idusuarios="<%= stringIdUsuarios %>">
+                                        <option selected value="0">Seleccionar usuario</option>
+                                    </select>
+                                </div>
+                                <div class="col text-center align-self-center text-dark">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="id_usuario" id="in-idusuario" placeholder="" required readonly>
+                                        <label for="in-idusuario">ID Usuario</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row g-2 justify-content-center p-2">
@@ -116,13 +140,6 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset class="d-none">
-                            <div class="row g-3 justify-content-center p-2">
-                                <div class="col text-center align-self-center text-dark">
-                                    <input type="datetime" name="creado" id="in-fecha" placeholder="" required>
-                                </div>
-                            </div>
-                        </fieldset>
                         <fieldset class="p-2">
                             <div class="row justify-content-center p-2">
                                 <div class="col text-center align-self-center">
@@ -138,8 +155,9 @@
         </div>
     </section>
 
+    <script src="/script/cargar_lista_usuarios.js"></script>
     <script src="/script/cargar_coches.js"></script>
-    <script src="/script/crear_anuncio.js"></script>
+    <script src="/script/crear_anuncio.js" type="module"></script>
 
 </body>
 </html>

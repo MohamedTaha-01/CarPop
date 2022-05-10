@@ -24,7 +24,43 @@ window.addEventListener("load", function(){
     sCombustibles.addEventListener("focusout", validarCombustible);
     sTransmisiones.addEventListener("focusout", validarTransmision);
     inPrecio.addEventListener("focusout", validarPrecio);
-    form.addEventListener("submit", enviarFormulario);
+    form.addEventListener("submit", async(e)=>{
+        
+        // cuando se hace submit cancelar envío de form
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (okValidaciones()) { // ¿validaciones correctas?
+            const id = form.dataset.id; // obtener id del anuncio siendo editado
+            // introduce values en el json del body
+            try {
+                const data = await fetch(`/admin/anuncios/${id}`, {
+                    method: 'put',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id_usuario: inIdUsuario.value,
+                        titulo: inTitulo.value,
+                        descripcion: inDescripcion.value,
+                        matricula: inMatricula.value,
+                        marca: sMarcas.value,
+                        modelo: sModelos.value,
+                        combustible: sCombustibles.value,
+                        transmision: sTransmisiones.value,
+                        precio: inPrecio.value
+                    })
+                });
+                const resjson = await data.json(); // json de respuesta del servidor 
+                if (resjson.editado) {
+                    console.log(resjson.mensaje);
+                    window.location.href = '/admin/anuncios';
+                } else {
+                    console.log(resjson.mensaje);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+    });
 
     function validarIdUsuario(){
 
@@ -141,13 +177,15 @@ window.addEventListener("load", function(){
         }
     }
 
-    function enviarFormulario(e){
+    function okValidaciones(e){
 
-        if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
-         !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        } else return true;
+        if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() || !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()) return false;
+        else return true;
     }
+
 })
+
+
+
+
+

@@ -14,19 +14,21 @@
         <div class="row bg-light m-2 my-3">
             <div class="col p-2">
                 <div class="bg-light px-1 table-responsive">
-                    <table class="table table-sm table-hover">
+                    <table class="table table-sm table-hover align-middle">
                         <thead>
                             <tr>
-                                <th scope="col">ID Anuncio/Usuario</th>
+                                <th scope="col">ID Anuncio</th>
+                                <th scope="col">Creado&nbsp;por</th>
                                 <th scope="col">Título</th>
                                 <th scope="col">Descripción</th>
                                 <th scope="col">Matrícula</th>
                                 <th scope="col">Marca</th>
                                 <th scope="col">Modelo</th>
                                 <th scope="col">Combustible</th>
-                                <th scope="col">Transmisión</th>
+                                <th scope="col">Trans.</th>
                                 <th scope="col">Precio</th>
-                                <th scope="col">Creado</th>
+                                <th scope="col">Fecha&nbsp;de&nbsp;creación</th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -34,18 +36,45 @@
                             <% if (anuncios.length>0) { %>
                                 <% anuncios.forEach(anuncio => { %>
                                     <tr>
-                                        <td><%= anuncio._id+' / '+anuncio.id_usuario%></td>
+                                        <td><%= anuncio._id %></td>
+                                        <td>
+                                            <% usuarios.forEach(usuario => { %>
+                                                <% if (usuario._id == anuncio.id_usuario) { %>
+                                                    <a href="usuarios/<%= anuncio.id_usuario %>" class="link-dark ">
+                                                        <%= `${usuario.nombre}\xa0${usuario.apellido}` %>
+                                                    </a>
+                                                <% } %>
+                                            <% }) %>
+                                        </td>
                                         <td><%= anuncio.titulo %></td>
-                                        <td><%= anuncio.descripcion %></td>
+                                        <td>
+                                            <% if (anuncio.descripcion.length>50) { %>
+                                                <span><%=anuncio.descripcion.substring(0,50)%>...</span>
+                                            <% } %>
+                                            <% if (anuncio.descripcion.length<=50) { %>
+                                                <span><%=anuncio.descripcion%></span>
+                                            <% } %>
+                                        </td>
                                         <td><%= anuncio.matricula %></td>
                                         <td><%= anuncio.marca %></td>
                                         <td><%= anuncio.modelo %></td>
                                         <td><%= anuncio.combustible %></td>
-                                        <td><%= anuncio.transmision %></td>
-                                        <td><%= anuncio.precio %></td>
-                                        <td><%= anuncio.creado %></td>
+                                        <td><%= anuncio.transmision.substring(0,1) %></td>
+                                        <td><%= anuncio.precio %>€/h</td>
+                                        <td>
+                                            <% let fechaCreacion = new Date(anuncio.creado) %> 
+                                            <%=`${fechaCreacion.getDate()}/${fechaCreacion.getMonth()+1}/${fechaCreacion.getFullYear()}\xa0${fechaCreacion.getHours()}:${fechaCreacion.getMinutes()}:${fechaCreacion.getSeconds()}`%>
+                                        </td>
                                         <td class="text-center align-middle">
-                                            <button class="btn btn-primary"><img src="/img/google/edit.svg"></button>
+                                            <a class="btn btn-primary btn-block" href="/admin/anuncios/<%=anuncio._id%>">
+                                                <img src="/img/google/edit.svg">
+                                            </a>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <a class="btn btn-danger btn-block b-eliminar-anuncio" data-id="<%= anuncio.id %>">
+                                                <img src="/img/google/delete2.svg">
+                                            </a>
+                                            <!-- <button class="btn btn-danger btn-block" data-id="<%=anuncio._id%>" id="b-eliminar-anuncio"></button> -->
                                         </td>
                                     </tr>
                                 <% }) %>
@@ -53,8 +82,8 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="11" class="text-center align-middle">
-                                    <a class="btn btn-primary btn-block w-50" href="/admin/anuncios/crear">Crear anuncio</a>
+                                <td colspan="13" class="text-center align-middle">
+                                    <a class="btn btn-primary btn-block w-50" href="/admin/anuncios/crear"><img src="/img/google/add.svg"></a>
                                 </td>
                             </tr>
                         </tfoot>
@@ -63,6 +92,56 @@
             </div>
         </div>
     </section>
+
+    <div id="modal" class="modal p-5">
+        <div class="contenido-modal bg-primary mx-auto my-5">
+            <div class="row bg-primary p-2">
+                <div class="col text-sm-start mt-2">
+                    <div class="h4">
+                        <span id="titulo-modal"></span>
+                    </div>
+                </div>
+                <div class="col text-end mt-2">
+                    <span class="cerrar-modal h4 fw-bold">&times;</span>
+                </div>
+            </div>
+            <div class="row bg-light p-3">
+                <div class="col">
+                    <span id="mensaje-modal"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="module"> // script eliminar anuncio
+        import * as alertas from '/script/alertas.js';
+
+        // boton eliminar anuncio
+        let bEliminarAn = document.querySelectorAll('.b-eliminar-anuncio');
+        bEliminarAn.forEach(boton => {
+            
+            boton.addEventListener("click", async() =>{
+            let idEliminarAn = boton.dataset.id;
+            try {
+                const res = await fetch(`/admin/anuncios/eliminar/${idEliminarAn}`, {method: 'DELETE'});
+                const resjson = await res.json();
+                if (resjson.eliminado) {
+                    location.reload();
+                    console.log(resjson.mensaje);
+                    alertas.info("", resjson.mensaje);
+                } else {
+                    // renderizar respuesta en DOM
+                    console.log(resjson.mensaje);
+                    alertas.info("Error", resjson.mensaje);
+                }
+            } catch (error) {
+                
+            }
+        });
+        });
+        
+    </script>
 
 </body>
 </html>
