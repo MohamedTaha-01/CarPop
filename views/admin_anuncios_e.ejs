@@ -22,7 +22,7 @@
                         <%= mensaje %> 
                     <% } %>
                     <% if (!error) { %>
-                        <form action="/admin" method="POST" class="p-3 needs-validation" novalidate>
+                        <form class="p-3 needs-validation" novalidate data-id="<%= anuncio.id %>">
                             <div class="row justify-content-center">
                                 <div class="col text-center">
                                     <p></p>
@@ -32,6 +32,25 @@
                                 <div class="row justify-content-center pb-3 px-2">
                                     <div class="col text-center align-self-center">
                                         <div class="h3 text-dark">Editar anuncio</div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <% let stringUsuarios = ''; %>
+                                        <% let stringIdUsuarios = ''; %>
+                                        <% usuarios.forEach(usuario => { %>
+                                            <% stringUsuarios = stringUsuarios.concat(',',usuario.nombre+' '+usuario.apellido); %>
+                                            <% stringIdUsuarios = stringIdUsuarios.concat(',',usuario._id); %>
+                                        <% }) %>
+                                        <select class="form-select" id="lista-usuarios" name="usuario" data-usuarios="<%= stringUsuarios %>" data-idusuarios="<%= stringIdUsuarios %>">
+                                            <option selected value="0">Seleccionar usuario</option>
+                                        </select>
+                                    </div>
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="id_usuario" id="in-idusuario" placeholder="" required readonly data-idusuarioanuncio="<%= anuncio.id_usuario %>"> 
+                                            <label for="in-idusuario">ID Usuario</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row g-2 justify-content-center p-2">
@@ -82,19 +101,19 @@
                                 </div>
                                 <div class="row g-2 justify-content-center p-2">
                                     <div class="col text-center align-self-center text-dark">
-                                        <select class="form-select" id="lista-marcas" name="marca">
-                                            <option selected value="0">Seleccionar marca</option>
+                                        <select class="form-select" id="lista-marcas" name="marca" data-marcaanuncio="<%= anuncio.marca %>">
+                                            <option value="0">Seleccionar marca</option>
                                         </select>
                                     </div>
                                     <div class="col text-center align-self-center text-dark">
-                                        <select class="form-select" id="lista-modelos" name="modelo" disabled>
-                                            <option selected value="0">Seleccionar modelo</option>
+                                        <select class="form-select" id="lista-modelos" name="modelo" disabled data-modeloanuncio="<%= anuncio.modelo %>">
+                                            <option value="0">Seleccionar modelo</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row g-2 justify-content-center p-2">
                                     <div class="col text-center align-self-center text-dark">
-                                        <select class="form-select" id="lista-combustibles" name="combustible">
+                                        <select class="form-select" id="lista-combustibles" name="combustible" data-combanuncio="<%= anuncio.combustible %>">
                                             <option value="0">Seleccionar combustible</option>
                                             <option value="Gasolina">Gasolina</option>
                                             <option value="Diésel">Diésel</option>
@@ -103,7 +122,7 @@
                                         </select>
                                     </div>
                                     <div class="col text-center align-self-center text-dark">
-                                        <select class="form-select" id="lista-transmisiones" name="transmision">
+                                        <select class="form-select" id="lista-transmisiones" name="transmision" data-transanuncio="<%= anuncio.transmision %>">
                                             <option value="0">Seleccionar transmisión</option>
                                             <option value="Manual">Manual</option>
                                             <option value="Automático">Automático</option>
@@ -128,25 +147,25 @@
                             <fieldset class="d-none">
                                 <div class="row g-3 justify-content-center p-2">
                                     <div class="col text-center align-self-center text-dark">
-                                        <input type="datetime" name="creado" id="in-fecha" placeholder="" required>
+                                        <input type="datetime" name="creado" id="in-fecha" placeholder="" required readonly value="<%= anuncio.creado %>"> 
                                     </div>
                                 </div>
                             </fieldset>
                             <fieldset class="p-2">
                                 <div class="row justify-content-center p-2">
-                                    <div class="col-12 col-sm-5 text-center text-sm-end align-self-center p-2">
-                                        <button class="btn btn-danger w-50 p-3">
-                                            Eliminar
-                                        </button>
+                                    <div class="col-12 col-md-5 text-center text-md-end align-self-center p-2">
+                                        <a type="menu" class="btn btn-danger btn-block w-50 p-3" href="/admin/anuncios">
+                                            Descartar cambios
+                                        </a>
                                     </div>
-                                    <div class="col-12 col-sm-auto text-center align-self-center">
-                                        <button type="submit" class="btn btn-primary p-3 align-self-center p-2" onclick="location.reload(true)">
+                                    <div class="col-12 col-md-auto text-center align-self-center">
+                                        <button type="reset" class="btn btn-primary btn-block p-3 align-self-center p-2">
                                             <img src="/img/google/refresh.svg" class="img-fluid">
                                         </button>
                                     </div>
-                                    <div class="col-12 col-sm-5 text-center text-sm-start align-self-center p-2">
-                                        <button type="submit" class="btn btn-primary w-50 p-3">
-                                            Confirmar
+                                    <div class="col-12 col-md-5 text-center text-md-start align-self-center p-2">
+                                        <button type="submit" class="btn btn-success btn-block w-50 p-3">
+                                            Confirmar cambios
                                         </button>
                                     </div>
                                 </div>
@@ -158,8 +177,9 @@
         </div>
     </section>
 
-    <script src="/script/cargar_coches.js"></script>
-    <script src="/script/crear_anuncio.js"></script>
-
+    <script src="/script/cargar_lista_usuarios.js"></script> <!-- Carga lista usuarios -->
+    <script src="/script/cargar_coches.js" async></script> <!-- Carga marcas y modelos -->
+    <script src="/script/cargar_desde_anuncio.js"></script> <!-- Carga modelo y transmision -->
+    <script src="/script/editar_anuncio.js" type="module"></script> <!-- Funcionalidad editar anuncio y validación -->
 </body>
 </html>
