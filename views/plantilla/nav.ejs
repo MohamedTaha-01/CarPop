@@ -43,15 +43,26 @@
                 </li>
             </ul>
             <ul class="navbar-nav">
-                <li class="navbar-item">
-                    <a href="iniciar_sesion" class="nav-link">Iniciar sesión</a>
-                </li>
-                <li class="navbar-text d-none d-md-block">
-                    |
-                </li>
-                <li class="navbar-item">
-                    <a href="registrarse" class="nav-link">Registrarse</a>
-                </li>
+                <% if (autorizado) { %>
+                    <li class="navbar-item">
+                        <a href="#" class="nav-link"> <%= usuario.nombre+' '+usuario.apellido.substr(0,1)+'.' %> </a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="/cerrar_sesion" class="nav-link">
+                            <img src="/img/google/logout2.svg" alt="">
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="navbar-item">
+                        <a href="iniciar_sesion" class="nav-link">Iniciar sesión</a>
+                    </li>
+                    <li class="navbar-text d-none d-md-block">
+                        |
+                    </li>
+                    <li class="navbar-item">
+                        <a href="registrarse" class="nav-link">Registrarse</a>
+                    </li>
+                <% } %>
             </ul>   
         </div>
     </div>
