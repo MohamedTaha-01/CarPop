@@ -3,7 +3,7 @@
 <%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Alquilar'}) %>
 <body>
 
-    <header><%- include('./plantilla/nav.ejs'); %></header>
+    <header><%- include('./plantilla/nav', {autorizado, usuario}); %></header>
     
     <div class="p-2 container py-5">
         <div class="row pt-5">

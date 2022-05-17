@@ -1,11 +1,33 @@
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 const {check, validationResult} = require('express-validator');
+const { findById } = require('../modelo/Anuncio');
 require('dotenv').config();
 
 // importar modelos anuncio y usuario
 const Anuncio = require('../modelo/Anuncio');
 const Usuario = require('../modelo/Usuario');
+
+let autorizado;
+let usuario;
+
+const isAuth = (req, res, next) => {
+
+    if(req.session.isAuth){
+        next();
+    } else {
+        res.redirect("/iniciar_sesion");
+    }
+}
+const isAuthRechazar = (req, res, next) => {
+
+    if(req.session.isAuth){
+        res.redirect("/");
+    } else {
+        next();
+    }
+}
 
 /**
  * * ROUTING Y SESIONES
@@ -13,10 +35,17 @@ const Usuario = require('../modelo/Usuario');
 
 router.get('/', (req,res) => {
 
-    res.status(200).render('index');
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuario = req.session.usuario;
+    } else {
+        autorizado = false;
+        usuario = null;
+    }
+    res.status(200).render('index', {autorizado, usuario});
 });
 
-router.get('/registrarse', (req, res)=>{
+router.get('/registrarse', isAuthRechazar, (req, res)=>{
 
     res.status(200).render("registrarse");
 });
@@ -60,7 +89,7 @@ router.post('/registrarse', [
         try { // introducir usuario creado en BBDD
             const usuarioDB = new Usuario(user);
             await usuarioDB.save();
-            res.redirect('/');
+            res.redirect('/iniciar_sesion');
         } catch (error) {
             console.log(error);
         }
@@ -68,7 +97,7 @@ router.post('/registrarse', [
     }
 });
 
-router.get('/iniciar_sesion', (req, res)=>{
+router.get('/iniciar_sesion', isAuthRechazar, (req, res)=>{
 
     res.status(200).render("iniciar_sesion");
 });
@@ -101,30 +130,56 @@ router.post('/iniciar_sesion', [
 
             } else {
 
-                res.json({
-                    ejecutado: true,
-                    data: {
-                        mensaje: "Login correctamente",
-                        Usuario: user
-                    },
-                })
+                // res.json({
+                //     ejecutado: true,
+                //     data: {
+                //         mensaje: "Login correctamente",
+                //         Usuario: user
+                //     },
+                // })
+
+                // autorizamos sesion y guardamos el id del usuario autorizado
+                req.session.isAuth = true;
+                try {
+                    req.session.usuario = await Usuario.findById(user._id.toString());
+                } catch (error) {
+                    
+                }
+                res.redirect("/");
             }
         }
     }
 })
 
+router.get('/cerrar_sesion', (req, res)=>{
+
+    req.session.destroy((err)=>{
+        if (err) {
+            throw err;
+        }
+        res.redirect('/');
+    })
+})
+
 
 // mostrar anuncios
-router.get('/alquilar', async (req, res)=>{
+router.get('/alquilar', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuario = req.session.usuario;
+    } else {
+        autorizado = false;
+        usuario = null;
+    }
 
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
         const arrayAnuncios = await Anuncio.find(); // encuentra la coleccion anuncios
-        res.status(200).render("alquilar", {usuarios: arrayUsuarios, anuncios: arrayAnuncios});
-        console.log(req.user);
+        res.status(200).render("alquilar", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuario});
     } catch (error) {
         console.log(error);
-        res.render("alquilar", error);
+        res.render("alquilar", error, autorizado, usuario);
     } 
 });
 
