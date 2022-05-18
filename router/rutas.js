@@ -10,7 +10,7 @@ const Anuncio = require('../modelo/Anuncio');
 const Usuario = require('../modelo/Usuario');
 
 let autorizado;
-let usuario;
+let usuarioAutentificado;
 
 const isAuth = (req, res, next) => {
 
@@ -30,20 +30,22 @@ const isAuthRechazar = (req, res, next) => {
 }
 
 /**
- * * ROUTING Y SESIONES
+ * * ROUTING -------------------------------------------------------------------------------------
  */
 
 router.get('/', (req,res) => {
 
     if (req.session.isAuth) {
         autorizado = true;
-        usuario = req.session.usuario;
+        usuarioAutentificado = req.session.usuarioAutentificado;
     } else {
         autorizado = false;
-        usuario = null;
+        usuarioAutentificado = null;
     }
-    res.status(200).render('index', {autorizado, usuario});
+    res.status(200).render('index', {autorizado, usuarioAutentificado});
 });
+
+//* Sesiones //
 
 router.get('/registrarse', isAuthRechazar, (req, res)=>{
 
@@ -130,22 +132,14 @@ router.post('/iniciar_sesion', [
 
             } else {
 
-                // res.json({
-                //     ejecutado: true,
-                //     data: {
-                //         mensaje: "Login correctamente",
-                //         Usuario: user
-                //     },
-                // })
-
                 // autorizamos sesion y guardamos el id del usuario autorizado
                 req.session.isAuth = true;
                 try {
-                    req.session.usuario = await Usuario.findById(user._id.toString());
+                    req.session.usuarioAutentificado = await Usuario.findById(user._id.toString());
                 } catch (error) {
-                    
+                    console.log(error);
                 }
-                res.redirect("/");
+                res.redirect("back");
             }
         }
     }
@@ -161,26 +155,101 @@ router.get('/cerrar_sesion', (req, res)=>{
     })
 })
 
+//* Anuncios //
 
-// mostrar anuncios
 router.get('/alquilar', isAuth, async (req, res)=>{
 
     if (req.session.isAuth) {
         autorizado = true;
-        usuario = req.session.usuario;
+        usuarioAutentificado = req.session.usuarioAutentificado;
     } else {
         autorizado = false;
-        usuario = null;
+        usuarioAutentificado = null;
     }
 
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
         const arrayAnuncios = await Anuncio.find(); // encuentra la coleccion anuncios
-        res.status(200).render("alquilar", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuario});
+        res.status(200).render("alquilar", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuarioAutentificado});
     } catch (error) {
         console.log(error);
-        res.render("alquilar", error, autorizado, usuario);
+        res.render("alquilar", error, autorizado, usuarioAutentificado);
     } 
+});
+
+router.get('/alquilar/:id_anuncio', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_anuncio = req.params.id_anuncio;
+    try {
+        const anuncioDB = await Anuncio.findById(id_anuncio);
+        const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
+        res.render("anuncio", {
+            anuncio: anuncioDB,
+            usuarios: arrayUsuarios,
+            error: false,
+            autorizado, 
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("anuncio", {
+            error: true, 
+            mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
+});
+
+router.get('/crear_anuncio', isAuth, async(req,res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+    res.status(200).render("crear_anuncio", {autorizado, usuarioAutentificado});
+
+})
+
+//* Perfiles //
+
+router.get('/perfiles/:id_usuario', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_usuario = req.params.id_usuario;
+    try {
+        const usuarioDB = await Usuario.findById(id_usuario);
+        res.render("perfil", {
+            usuario: usuarioDB, 
+            error: false,
+            autorizado,
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("perfil", {
+            error: true, 
+            mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
 });
 
 module.exports = router;
