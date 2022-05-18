@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Anuncio'}) %>
+<body>
+
+    <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
+
+    <div class="p-2 container py-5" style="margin-top: 66px !important;">
+        <div class="col p-1 py-3">
+            <div class="row my-3 mb-4">
+                <div class="col d-flex justify-content-between">
+                    <div class="h3"><%= anuncio.titulo %></div>
+                    <div class="h3"><%= anuncio.precio %>€/h</div>
+                </div>
+            </div>
+            <hr class="mb-5">
+            <div class="row mb-2">
+                <div class="col text-center">
+                    <img src="<%= anuncio.img %>" class="w-100 img-fluid">
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col d-flex justify-content-between">
+                    <p class="text-info">
+                        <%=`Publicado\xa0el\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3 mb-5">
+                <div class="col-12 d-flex justify-content-center">
+                    <!-- pc -->
+                    <div class="d-none d-md-block tarjeta w-50" style="height: 100px !important;">
+                        <div class="row h-100">
+                            <div class="col-12 col-md-8 p-3 px-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <% usuarios.forEach(usuario => { %>
+                                            <% if (usuario._id==anuncio.id_usuario) { %>
+                                                <p class="fw-bold">Publicado por <%= usuario.nombre+' '+usuario.apellido %> </p>
+                                            <% } %>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        estrellitas
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 align-self-center text-center">
+                                <a href="/perfiles/<%=anuncio.id_usuario%>" class="btn btn-block btn-primary p-4 fw-bold">
+                                    Ver perfil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- móvil -->
+                    <div class="d-block d-md-none tarjeta" style="height: fit-content !important;">
+                        <div class="row">
+                            <div class="col-12 col-md-8 p-3 px-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <% usuarios.forEach(usuario => { %>
+                                            <% if (usuario._id==anuncio.id_usuario) { %>
+                                                <p class="fw-bold">Publicado por <%= usuario.nombre+' '+usuario.apellido %> </p>
+                                            <% } %>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        estrellitas
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 align-self-center text-center p-4">
+                                <a href="/perfiles/<%=anuncio.id_usuario%>" class="btn btn-block btn-primary p-4 fw-bold">
+                                    Ver perfil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col">
+                    <div class="h3 py-3">Descripción</div>
+                    <p><%= anuncio.descripcion %> </p>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col">
+                    <div class="h3 py-3">Características</div>
+                    <p><%= anuncio.descripcion %> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><%- include('./plantilla/pie'); %></footer>
+
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+</body>
+</html>
