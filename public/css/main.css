@@ -124,3 +124,31 @@ p,.h1,.h2,.h3{
     position: relative;
     top: -5px;
 }
+
+/* Tarjetas */
+.tarjeta{
+    height: 272px !important;
+    background-color: #ffffff;
+    border: 1px solid #868c8e8b;
+    border-radius: 6px;
+}
+
+.tarjeta-titulo{
+    height: 50px !important;
+    font-size: 130% !important;
+    overflow: hidden;
+}
+.tarjeta-descripcion{
+    height: 180px !important;
+    font-size: 110% !important;
+    overflow: hidden;
+}
+.tarjeta-pie{
+    height: 42px !important;
+    background-color: #f7f7f7;
+    border-top: 1px solid #868c8e8b;
+    border-bottom: 1px solid #868c8e8b;
+    border-radius: 0px 0px 6px 0px;
+    font-size: 90% !important;
+    overflow: hidden;
+}
