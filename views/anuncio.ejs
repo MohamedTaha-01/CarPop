@@ -6,7 +6,7 @@
     <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
 
     <div class="p-2 container py-5" style="margin-top: 66px !important;">
-        <div class="col p-1 py-3">
+        <div class="col p-1 py-md-3">
             <div class="row my-3 mb-4">
                 <div class="col d-flex justify-content-between">
                     <div class="h3"><%= anuncio.titulo %></div>
@@ -16,7 +16,7 @@
             <hr class="mb-5">
             <div class="row mb-2">
                 <div class="col text-center">
-                    <img src="<%= anuncio.img %>" class="w-100 img-fluid" style="border: 1px transparent black; border-radius: 5px;">
+                    <img src="<%= anuncio.img %>" class="w-100 img-fluid" style="border: 1px transparent black; border-radius: 5px; max-width: 1296px !important; max-height: 792px !important;">
                 </div>
             </div>
             <div class="row my-2">
