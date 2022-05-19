@@ -90,26 +90,26 @@
                                 </div>
                             </a> -->
 
-                                <a href="alquilar/<%= anuncio._id %>">
-                                
-                                    <div class="row g-0 mb-5 tarjeta">
-                                        <div class="d-none d-md-block col-md-4" style="height: 272px !important;">
-                                            <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100" draggable="false" style="object-fit: cover !important; object-position: center !important;">
+                            <a href="alquilar/<%= anuncio._id %>" class="tarjeta-a">
+                            
+                                <div class="row g-0 mb-5 tarjeta">
+                                    <div class="d-none d-md-block col-md-4" style="height: 252px !important;">
+                                        <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
+                                    </div>
+                                    <div class="col col-md-8" style="height: 252px !important;">
+                                        <div class="p-2 px-3 text-dark tarjeta-titulo">
+                                            <%= anuncio.titulo %>
                                         </div>
-                                        <div class="col col-md-8" style="height: 272px !important;">
-                                            <div class="p-2 px-3 text-dark tarjeta-titulo">
-                                                <%= anuncio.titulo %>
-                                            </div>
-                                            <div class="p-2 px-3 text-dark tarjeta-descripcion">
-                                                <%= anuncio.descripcion %>
-                                            </div>
-                                            <div class="p-2 px-3 text-dark tarjeta-pie">
-                                                <%=`Fecha\xa0de\xa0publicación:\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
-                                            </div>
+                                        <div class="p-2 px-3 text-dark tarjeta-descripcion">
+                                            <%= anuncio.descripcion %>
+                                        </div>
+                                        <div class="p-2 px-3 text-dark tarjeta-pie">
+                                            <%=`Fecha\xa0de\xa0publicación:\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
                                         </div>
                                     </div>
+                                </div>
     
-                                </a>
+                            </a>
 
                         <% }) %>
                     </div>

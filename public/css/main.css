@@ -127,20 +127,19 @@ p,.h1,.h2,.h3{
 
 /* Tarjetas */
 .tarjeta{
-    height: 272px !important;
+    height: 252px !important;
     background-color: #ffffff;
     border: 1px solid #868c8e8b;
     border-radius: 6px;
 }
-
 .tarjeta-titulo{
-    height: 50px !important;
+    height: 40px !important;
     font-size: 130% !important;
     overflow: hidden;
 }
 .tarjeta-descripcion{
-    height: 180px !important;
-    font-size: 110% !important;
+    height: 170px !important;
+    font-size: 105% !important;
     overflow: hidden;
 }
 .tarjeta-pie{
@@ -152,7 +151,13 @@ p,.h1,.h2,.h3{
     font-size: 90% !important;
     overflow: hidden;
 }
+.tarjeta-img{
+    object-fit: cover;
+    object-position: center !important;
+    transition: transform .15s !important;
+}
 
+/* 404.ejs */
 .img404{
     width: 40% !important;
     height: 40% !important;
