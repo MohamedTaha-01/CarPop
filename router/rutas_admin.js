@@ -6,14 +6,26 @@ const {check, validationResult} = require('express-validator');
 const Anuncio = require('../modelo/Anuncio');
 const Usuario = require('../modelo/Usuario');
 
-router.get('/', (req, res)=>{
+const esAdmin = (req, res, next) => {
+
+    if (req.session.isAuth) {
+        let usuarioAutentificado = req.session.usuarioAutentificado;
+        if (usuarioAutentificado.admin) {
+            next();
+        } else {
+            res.status(403).render("403");
+        }
+    } else res.status(403).render("403");
+}
+
+router.get('/', esAdmin, (req, res)=>{
 
     res.render("admin");
 });
 
 //* ANUNCIOS ---------------------------------------------------------------------------------------------------
 // mostrar anuncios
-router.get('/anuncios', async (req, res)=>{
+router.get('/anuncios', esAdmin, async (req, res)=>{
 
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
@@ -26,7 +38,7 @@ router.get('/anuncios', async (req, res)=>{
     
 });
 // crear anuncio
-router.get('/anuncios/crear', async(req, res)=>{
+router.get('/anuncios/crear', esAdmin, async(req, res)=>{
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
         res.render("admin_anuncios_c", {usuarios: arrayUsuarios});
@@ -91,7 +103,7 @@ router.delete('/anuncios/eliminar/:id_anuncio', async(req,res)=>{
     }
 });
 // get anuncio by id
-router.get('/anuncios/:id_anuncio',async(req,res)=>{
+router.get('/anuncios/:id_anuncio', esAdmin, async(req,res)=>{
 
     const id_anuncio = req.params.id_anuncio;
     try {
@@ -149,7 +161,7 @@ router.put('/anuncios/:id_anuncio', [
 
 //* USUARIOS ---------------------------------------------------------------------------------------------------
 
-router.get('/usuarios', async (req, res)=>{
+router.get('/usuarios', esAdmin, async (req, res)=>{
 
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
