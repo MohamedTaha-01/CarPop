@@ -8,7 +8,7 @@
 
     <section class="p-2 container-fluid pt-5">
         <div class="col col-md-5 m-auto pt-5">
-            <form action="?" method="post" class="p-3 needs-validation" novalidate>
+            <form action="/crear_anuncio" method="post" class="p-3 needs-validation" novalidate>
                 <div class="row justify-content-center">
                     <div class="col text-center">
                         <img src="/img/google/description.svg" alt="logo" class="" draggable="false">
@@ -23,7 +23,7 @@
                     <div class="row g-2 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="in-titulo" id="in-titulo" placeholder="" required>
+                                <input type="text" class="form-control" name="titulo" id="in-titulo" placeholder="" required>
                                 <label for="in-titulo">Título</label>
                                 <div class="invalid-feedback d-none" id="err-titulo-vacio">
                                     Debes escribir un título
@@ -37,15 +37,18 @@
                     <div class="row g-2 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
                             <div class="form-floating">
-                                <textarea class="form-control h-100" id="in-descripcion" rows="9" placeholder="" required></textarea>
+                                <textarea class="form-control h-100" id="in-descripcion" name="descripcion" rows="9" placeholder="" required></textarea>
                                 <label for="in-descripcion">Descripción</label>
+                                <div class="invalid-feedback d-none" id="err-desc-caracteres">
+                                    La descripción debe tener entre 3 y 300 caracteres
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row g-2 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
                             <div class="">
-                                <input class="form-control" type="file" id="in-imagen">
+                                <input class="form-control" type="text" id="in-imagen" name="img">
                             </div>
                         </div>
                     </div>    
@@ -55,8 +58,11 @@
                     <div class="row g-3 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="in-matricula" id="in-matricula" placeholder="" required>
+                                <input type="text" class="form-control" name="matricula" id="in-matricula" placeholder="" required>
                                 <label for="in-matricula">Matrícula</label>
+                                <div class="invalid-feedback d-none" id="err-matricula">
+                                    Introduce una matrícula válida
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -74,19 +80,19 @@
                     </div>
                     <div class="row g-2 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
-                            <select class="form-select" id="lista-combustibles">
+                            <select class="form-select" id="lista-combustibles" name="combustible">
                                 <option value="0">Seleccionar combustible</option>
-                                <option value="gasolina">Gasolina</option>
-                                <option value="diesel">Diésel</option>
-                                <option value="electrico">Eléctrico</option>
-                                <option value="hibrido">Híbrido</option>
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diésel">Diésel</option>
+                                <option value="Eléctrico">Eléctrico</option>
+                                <option value="Híbrido">Híbrido</option>
                             </select>
                         </div>
                         <div class="col text-center align-self-center text-dark">
-                            <select class="form-select" id="lista-transmisiones">
+                            <select class="form-select" id="lista-transmisiones" name="transmision">
                                 <option value="0">Seleccionar transmisión</option>
-                                <option value="manual">Manual</option>
-                                <option value="automatico">Automático</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Automático">Automático</option>
                             </select>
                         </div>
                     </div>
@@ -96,8 +102,11 @@
                     <div class="row g-3 justify-content-center p-2">
                         <div class="col text-center align-self-center text-dark">
                             <div class="form-floating">
-                                <input type="number" class="form-control" name="in-precio" id="in-precio" placeholder="" required>
+                                <input type="number" class="form-control" name="precio" id="in-precio" placeholder="" required>
                                 <label for="in-precio">Precio por hora</label>
+                                <div class="invalid-feedback d-none" id="err-precio">
+                                    Debes introducir un número entre 1 y 999.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,7 +128,7 @@
 
     <script src="/script/ir_arriba.js"></script>
     <script src="/script/cargar_coches.js"></script>
-    <script src="/script/crear_anuncio.js"></script>
+    <script src="/script/crear_anuncio.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

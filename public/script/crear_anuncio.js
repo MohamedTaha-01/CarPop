@@ -2,9 +2,16 @@ import * as validarAnuncio from '/script/validar_anuncio.js';
 
 window.addEventListener("load", function(){
 
+    let hayCampoIdUsuario=true;
+
     let form = document.getElementsByTagName("form")[0];
-    let sIdUsuario = this.document.getElementById("lista-usuarios");
-    let inIdUsuario = document.getElementById("in-idusuario");
+    if(this.document.getElementById("lista-usuarios")==''||this.document.getElementById("lista-usuarios")==null){
+        hayCampoIdUsuario=false;
+    } else {
+        let sIdUsuario = this.document.getElementById("lista-usuarios");
+        let inIdUsuario = document.getElementById("in-idusuario");
+        hayCampoIdUsuario=true;
+    }
     let inTitulo = document.getElementById("in-titulo");
     let inDescripcion = document.getElementById("in-descripcion");
     let inImagen = document.getElementById("in-imagen");
@@ -143,11 +150,21 @@ window.addEventListener("load", function(){
 
     function enviarFormulario(e){
 
-        if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
+        if(hayCampoIdUsuario==true){
+            if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
+            !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
+               e.preventDefault();
+               e.stopPropagation();
+               return false;
+           } else return true;
+        } else {
+            if(!validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
          !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
             e.preventDefault();
             e.stopPropagation();
             return false;
         } else return true;
+        }
+        
     }
 })

@@ -219,7 +219,42 @@ router.get('/crear_anuncio', isAuth, async(req,res)=>{
     }
     res.status(200).render("crear_anuncio", {autorizado, usuarioAutentificado});
 
-})
+});
+router.post('/crear_anuncio', [
+    // Validación servidor
+    // ! falta validar imágen
+    check('titulo', 'Título no válido').trim().escape().isLength({ min: 3, max:50}),
+    check('descripcion', 'Descripción no válida').trim().escape().isLength({ min: 3, max:300}),
+    check('matricula', 'Matrícula no válida').matches(/^\d{4}[A-Z]{3}$/).custom(async (matricula) => {
+        const matriculaExiste = await Anuncio.findOne({ matricula })
+        if (matriculaExiste) {
+            throw new Error('La matrícula ya está en uso')
+        }
+    }),
+    check('combustible', 'Tipo de combustible no válido').isIn(['Gasolina', 'Diésel', 'Eléctrico', 'Híbrido']),
+    check('transmision', 'Tipo de transmisión no válido').isIn(['Manual', 'Automático']),
+    check('precio', 'Precio no válido').isInt({ gt: 0, lt:1000})
+], async(req,res)=>{
+
+    const erroresVal = validationResult(req);
+    if (!erroresVal.isEmpty()) {
+        // si hay errores enviar un json con los errores
+        console.log(erroresVal);
+        return res.status(422).json({erroresVal: erroresVal.array()});
+    } else {
+        // si no hay errores crear anuncio
+        req.body.id_usuario = req.session.usuarioAutentificado._id; // asignar el id del usuario autentificado en la sesión
+        req.body.creado = new Date();
+        const body = req.body;
+        try {
+            const anuncioDB = new Anuncio(body);
+            await anuncioDB.save();
+            res.redirect('/');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+});
 
 //* Perfiles //
 
