@@ -35,12 +35,14 @@
                             <li class="dropdown-item">
                                 <a href="ayuda#ayuda-contacto" class="nav-link">Contáctanos</a>
                             </li>
-                            <li class="dropdown-item">
-                                <a href="/admin" class="nav-link">Administración</a>
-                            </li>
                         </ul>
                     </div>
                 </li>
+                <% if (usuarioAutentificado && usuarioAutentificado.admin) { %>
+                    <li class="navbar-item">
+                        <a href="/admin" class="nav-link">Administración</a>
+                    </li>
+                <% } %>
             </ul>
             <ul class="navbar-nav">
                 <% if (autorizado) { %>
