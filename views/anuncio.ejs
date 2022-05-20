@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
-<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Anuncio'}) %>
+<% const titulo = 'CarPop - '+anuncio.titulo %> 
+<%- include('./plantilla/cabecera', {tituloWeb: titulo}) %>
 <body>
 
     <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
