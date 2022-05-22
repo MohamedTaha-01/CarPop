@@ -125,11 +125,23 @@ p,.h1,.h2,.h3{
     top: -5px;
 }
 
+/* x cerrar pantalla iniciar sesión y registrarse*/
+.x-cerrar {
+    color: rgba(255,255,255,.75);
+    font-weight: bold;
+  }
+.x-cerrar:hover,
+.x-cerrar:focus{
+    color: #fffafb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /* Tarjetas */
 .tarjeta{
     height: 252px !important;
     background-color: #ffffff;
-    border: 1px solid #868c8e8b;
+    border: 1.5px solid #868c8e8b;
     border-radius: 6px;
 }
 .tarjeta-titulo{
@@ -143,7 +155,7 @@ p,.h1,.h2,.h3{
     overflow: hidden;
 }
 .tarjeta-pie{
-    height: 42px !important;
+    height: 41px !important;
     background-color: #f7f7f7;
     border-top: 1px solid #868c8e8b;
     border-bottom: 1px solid #868c8e8b;
@@ -152,7 +164,8 @@ p,.h1,.h2,.h3{
     overflow: hidden;
 }
 .tarjeta-img{
-    object-fit: cover;
+    background-color: #fffafb;
+    object-fit: cover !important;
     object-position: center !important;
     transition: transform .15s !important;
 }

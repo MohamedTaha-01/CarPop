@@ -66,35 +66,19 @@
                 <div class="row p-1 mt-4 ps-md-5">
                     <div class="col p-md-4">
                         <% anuncios.forEach(anuncio => { %>
-                            <!-- <a href="alquilar/<%= anuncio._id %>">
-                                <div class="card mb-3 w-100 text-dark" style="height: 272px !important;">
-                                    <div class="row g-0" style="height: 272px !important;">
-                                        <div class="col-md-4" style="height: 272px !important;">
-                                            <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100" draggable="false" style="object-fit: cover;">
-                                        </div>
-                                        <div class="col-md-8" style="height: 272px !important;">
-                                            <div class="card-body" style="height: 230px !important;">
-                                                <h5 class="card-title"><%= anuncio.titulo %><span class="float-end"><%= anuncio.precio %>€/h</span></h5>
-                                                <p class="card-text"><%= anuncio.descripcion %></p>
-                                                <p class="card-text">
-                                                    <span class="badge bg-secondary me-2"><%= anuncio.marca+' '+anuncio.modelo%></span>
-                                                    <span class="badge bg-secondary me-2"><%= anuncio.combustible %></span>
-                                                    <span class="badge bg-secondary me-2"><%= anuncio.transmision %></span>
-                                                </p>
-                                            </div>
-                                            <div class="card-footer text-muted" style="height: 42px !important;">
-                                                <%=`Creado\xa0el\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a> -->
-
+                                
                             <a href="alquilar/<%= anuncio._id %>" class="tarjeta-a">
-                            
+                                <% if (anuncio.id_usuario == usuarioAutentificado._id) { %>
+                                <div class="row g-0 mb-5 tarjeta" style="background-color: #7de2d13a !important;">
+                                <% } else { %>
                                 <div class="row g-0 mb-5 tarjeta">
-                                    <div class="d-none d-md-block col-md-4" style="height: 252px !important;">
-                                        <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
+                                <% } %>
+                                    <div class="d-none d-md-flex col-md-4 justify-content-center" style="height: 251px !important;">
+                                        <% if (anuncio.img==null || anuncio.img=="") { %>
+                                            <img src="img/logo/carpop_logo2.png" class="img-fluid rounded-start w-75 h-75 tarjeta-img align-self-center" style="background-color: transparent;" draggable="false">
+                                        <% } else { %>
+                                            <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
+                                        <% } %>
                                     </div>
                                     <div class="col col-md-8" style="height: 252px !important;">
                                         <div class="p-2 px-3 text-dark tarjeta-titulo">

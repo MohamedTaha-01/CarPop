@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
-<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Anuncio'}) %>
+<% const titulo = 'CarPop - '+anuncio.titulo %> 
+<%- include('./plantilla/cabecera', {tituloWeb: titulo}) %>
 <body>
 
     <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
@@ -115,23 +116,9 @@
         </div>
     </div>
 
-    <div class="fs-6 d-none justify-content-center text-light p-2 fw-bold" id="modal-copiar-link" style="
-        position: fixed;
-        width: 200px;
-        height: fit-content;
-        z-index: 15;
-        bottom: 10%;
-        left: 50%;
-        margin: 0px 0 0 -100px;
-        background: #7de2d1;
-        border-radius: 25px;
-        text-align: center;">
-        <p class="my-auto">Enlace copiado</p>
-    </div>
-
     <footer><%- include('./plantilla/pie'); %></footer>
     
-    <script src="/script/anuncio.js"></script>
+    <script src="/script/anuncio.js" type="module"></script>
     <script src="/script/ir_arriba.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     

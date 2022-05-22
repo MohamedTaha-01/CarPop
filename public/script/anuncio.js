@@ -1,3 +1,5 @@
+import {crearModal} from './modal.js';
+
 window.addEventListener("load", ()=>{
 
     let bCopiarLink = document.getElementById("btn-copiar-link");
@@ -6,14 +8,9 @@ window.addEventListener("load", ()=>{
 
         e.preventDefault();
         navigator.clipboard.writeText(window.location.href).then(() => {
-            document.getElementById("modal-copiar-link").classList.remove("d-none");
-            document.getElementById("modal-copiar-link").classList.add("d-flex");
-            setTimeout((()=>{
-                document.getElementById("modal-copiar-link").classList.remove("d-flex");
-                document.getElementById("modal-copiar-link").classList.add("d-none");
-            }), 3000);
+            crearModal("Enlace copiado", false, 2500, true);
         }, () => {
-            //! mensaje error
+            crearModal("Error", "No se ha podido copiar el enlace", 2500, true);
         });
     });
 });
