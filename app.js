@@ -44,7 +44,7 @@ const store = new MongoDBSession({
 app.use(session({
     secret: process.env.SECRET,
     resave: false, // no crear nueva sesion por cada request
-    saveUninitialized: true,
+    saveUninitialized: false, //no guardar sesiones vacías (no autentificadas, sin loguear)
     store: store
 }))
 
