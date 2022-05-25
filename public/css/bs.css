@@ -96,10 +96,12 @@ COLORES
     background-color: var(--c-primario) !important;
     color: var(--c-dark) !important;
     border: none !important;
+    font-weight: bold;
 }
 .btn-primary:hover{
     background-color: var(--c-secundario) !important;
     border: none !important;
+    font-weight: bold;
 }
 
 .dropdown .dropdown-item:hover{
