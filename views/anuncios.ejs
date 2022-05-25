@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Anuncios'}) %>
+<body>
+
+    <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
+    
+    <div class="p-2 container py-5">
+        <div class="row pt-5">
+            <!-- FILTROS -->
+            <div class="col-12 col-lg-3 p-4" id="div-filtros">
+                <div class="row p-1">
+                    <div class="col"><div class="h3">Filtros</div></div>
+                </div>
+                <div class="row p-1 mt-2">
+                    <div class="col d-flex flex-column">
+                        <form action="/anuncios" method="GET" class="needs-validation">
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Marca</label>
+                                <select class="form-select" name="marca">
+                                    <option selected>Marca</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Modelo</label>
+                                <select class="form-select" name="modelo">
+                                    <option selected>Modelo</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Combustible</label>
+                                <select class="form-select" id="filtros-combustible" name="combustible">
+                                    <option selected></option>
+                                    <option>Gasolina</option>
+                                    <option>Diésel</option>
+                                    <option>Eléctrico</option>
+                                    <option>Híbrido</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Transmisión</label>
+                                <select class="form-select" name="transmision">
+                                    <option selected>Transmisión</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Precio</label>
+                                <div class="row">
+                                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" name="precio-min" id="in-precio" placeholder="">
+                                            <label for="in-precio">Mínimo</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" name="precio-max" id="in-precio" placeholder="">
+                                            <label for="in-precio">Máximo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2">
+                                <label class="form-label">Mis anuncios</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="mios">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Mostrar solo anuncios míos</label>
+                                </div>
+                            </fieldset>
+                            <fieldset class="d-flex flex-column p-2 mt-3">
+                                <button class="btn btn-primary btn-block p-3">Filtrar</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- BARRA LATERAL 
+            <div class="col-1 text-center">
+                <div class="vr h-100 bg-info"></div>
+            </div>  -->
+            <!-- ANUNCIOS -->
+            <div class="col-12 col-lg-9 p-4 mb-2 ps-md-5">
+                <div class="row p-1 ps-5">
+                    <div class="col d-flex flex-row justify-content-between">
+                        <div class="h3">Anuncios</div>
+                        <button class="btn btn-primary btn-block " id="btn-recargar">
+                            <span class="text-light">Actualizar</span> <img src="/img/google/refresh.svg">
+                        </button>
+                    </div>
+                </div>
+                <div class="row p-1 mt-4 ps-md-5">
+                    <div class="col p-md-4">
+                        <% anuncios.forEach(anuncio => { %>
+                                
+                            <a href="anuncios/<%= anuncio._id %>" class="tarjeta-a">
+                                <% if (anuncio.id_usuario == usuarioAutentificado._id) { %>
+                                <div class="row g-0 mb-5 tarjeta" style="background-color: #7de2d13a !important;">
+                                <% } else { %>
+                                <div class="row g-0 mb-5 tarjeta">
+                                <% } %>
+                                    <div class="d-none d-md-flex col-md-4 justify-content-center" style="height: 251px !important;">
+                                        <% if (anuncio.img==null || anuncio.img=="") { %>
+                                            <img src="img/logo/carpop_logo2.png" class="img-fluid rounded-start w-75 h-75 tarjeta-img align-self-center" style="background-color: transparent;" draggable="false">
+                                        <% } else { %>
+                                            <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
+                                        <% } %>
+                                    </div>
+                                    <div class="col col-md-8" style="height: 252px !important;">
+                                        <div class="p-2 px-3 text-dark tarjeta-titulo">
+                                            <%= anuncio.titulo %>
+                                        </div>
+                                        <div class="p-2 px-3 text-dark tarjeta-descripcion">
+                                            <%= anuncio.descripcion %>
+                                        </div>
+                                        <div class="p-2 px-3 text-dark tarjeta-pie d-flex flex-row justify-content-between">
+                                            <div class="my-auto mx-1" style="overflow: hidden"><%=`Publicado\xa0el\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%></div>
+                                            <div class="fw-bold fs-6 my-auto"><%= anuncio.precio %>€/d</div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </a>
+
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer><%- include('./plantilla/pie'); %></footer>
+
+    <script src="/script/anuncios.js"></script>
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

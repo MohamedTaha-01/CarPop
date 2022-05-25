@@ -11,7 +11,7 @@
             <div class="row my-3 mb-4">
                 <div class="col d-flex justify-content-between">
                     <div class="h3"><%= anuncio.titulo %></div>
-                    <div class="h3"><%= anuncio.precio %>€/h</div>
+                    <div class="h3"><%= anuncio.precio %>€/d</div>
                 </div>
             </div>
             <hr class="mb-5">
@@ -25,11 +25,13 @@
                     <p class="text-info align-self-center">
                         <%=`Publicado\xa0el\xa0${anuncio.creado.getDate()}/${anuncio.creado.getMonth()+1}/${anuncio.creado.getFullYear()}\xa0a\xa0las\xa0${anuncio.creado.getHours()}:${anuncio.creado.getMinutes()}:${anuncio.creado.getSeconds()}`%>
                     </p>
-                    <div>
-                        <button class="btn p-0" title="Reportar anuncio"><img src="/img/google/reportar.svg"></button>
-                        <button class="btn p-0" title="Añadir a favoritos"><img src="/img/google/fav.svg"></button>
-                        <button class="btn p-0" title="Copiar enlace"><img src="/img/google/link.svg" id="btn-copiar-link"></button>
-                    </div>
+                    <% if (usuarioAutentificado._id!=anuncio.id_usuario) { %>
+                        <div>
+                            <button class="btn p-0" title="Reportar anuncio"><img src="/img/google/reportar.svg"></button>
+                            <button class="btn p-0" title="Añadir a favoritos"><img src="/img/google/fav.svg"></button>
+                            <button class="btn p-0" title="Copiar enlace"><img src="/img/google/link.svg" id="btn-copiar-link"></button>
+                        </div>
+                    <% } %>
                 </div>
             </div>
             <div class="row mt-3 mb-5">
@@ -108,9 +110,62 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <div class="h3 py-3 text-dark">Dirección de recogida</div>
+                            <div class="d-flex flex-row flex-wrap d-md-block">
+                                <iframe class="w-100" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d656.7050371814163!2d-3.6514584198880824!3d40.47739954899045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422eb82fa37975%3A0x4f213f595c46f774!2sC%2F%20de%20Abizanda%2C%2070%2C%2028033%20Madrid!5e0!3m2!1ses!2ses!4v1653223198909!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12 col-md-4">
-                    Mapa y contacto o reservas
+
+                    <div class="row mb-2 sticky-md-top" style="overflow: unset; top: 80px; z-index: 997;">
+                        <div class="col-12">
+                            <% if (usuarioAutentificado._id!=anuncio.id_usuario) { %>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="h3 py-3 text-dark">Reservar</div>
+                                        <form action="" id="form-reservar">
+                                            <input class="form-control mb-3 p-3 bg-light" id="fecha-reservar" type="date" placeholder="Selecciona fecha">
+                                            <button class="btn btn-block btn-primary w-100 p-3" id="b-reservar" disabled>Reservar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col">
+                                        <div class="h3 py-3 text-dark">Contacto</div>
+                                        <% usuarios.forEach(usuario => { %>
+                                            <% if (usuario._id==anuncio.id_usuario) { %>
+                                                <p class="fw-bold text-dark mb-1">Teléfono</p>
+                                                <p class="text-dark"><%= usuario.telefono %></p>
+                                                <p class="fw-bold text-dark mb-1">Correo electrónico</p>
+                                                <p class="text-dark"><%= usuario.correo %></p>
+                                            <% } %>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="h3 py-3 text-dark">Opciones</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <a class="btn btn-block btn-primary w-100 p-3 mb-3" id="b-editar" href="/anuncios/editar/<%= anuncio._id %>"><img src="/img/google/edit.svg"></a>
+                                                <a class="btn btn-block btn-primary w-100 p-3 b-eliminar-anuncio" id="b-eliminar" data-id="<%= anuncio._id %> "><img src="/img/google/delete2.svg"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -118,9 +173,40 @@
 
     <footer><%- include('./plantilla/pie'); %></footer>
     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="/script/anuncio.js" type="module"></script>
     <script src="/script/ir_arriba.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    <script>
+        flatpickr.localize(flatpickr.l10ns.es);
+        const config={
+            altInput: true,
+            altFormat: "j F Y",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            mode: "range"
+        }
+        const formReservar = document.getElementById("form-reservar");
+        const fechaReservar = document.getElementById("fecha-reservar");
+        
+        const fp = flatpickr(fechaReservar, config);
+
+        formReservar.addEventListener("submit", (e)=>{
+
+            e.preventDefault();
+            e.stopPropagation();
+            console.log(fp.selectedDates);
+        });
+        document.getElementById("fecha-reservar").addEventListener("change", ()=> {        
+            if(fechaReservar.value != '' && fechaReservar.value!=null){
+                document.getElementById("b-reservar").removeAttribute("disabled");
+            } else {
+                document.getElementById("b-reservar").setAttribute("disabled","");
+            }
+        });
+    </script>
+    <script src="/script/eliminar_anuncio.js" type="module"></script>
     
 </body>
 </html>

@@ -2,6 +2,7 @@ let bIrArriba = document.createElement("button");
 bIrArriba.setAttribute("id","bIrArriba");
 bIrArriba.setAttribute("title","Ir arriba");
 bIrArriba.innerHTML = '<img src="/img/google/arrow_upward.svg"></img>';
+bIrArriba.style.zIndex = 999;
 
 document.getElementsByTagName("body")[0].appendChild(bIrArriba);
 

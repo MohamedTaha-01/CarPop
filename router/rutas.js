@@ -157,7 +157,7 @@ router.get('/cerrar_sesion', (req, res)=>{
 
 //* Anuncios //
 
-router.get('/alquilar', isAuth, async (req, res)=>{
+router.get('/anuncios', isAuth, async (req, res)=>{
 
     if (req.session.isAuth) {
         autorizado = true;
@@ -170,14 +170,14 @@ router.get('/alquilar', isAuth, async (req, res)=>{
     try {
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
         const arrayAnuncios = await Anuncio.find(); // encuentra la coleccion anuncios
-        res.status(200).render("alquilar", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuarioAutentificado});
+        res.status(200).render("anuncios", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuarioAutentificado});
     } catch (error) {
         console.log(error);
-        res.render("alquilar", error, autorizado, usuarioAutentificado);
+        res.render("anuncios", error, autorizado, usuarioAutentificado);
     } 
 });
 
-router.get('/alquilar/:id_anuncio', isAuth, async (req, res)=>{
+router.get('/anuncios/:id_anuncio', isAuth, async (req, res)=>{
 
     if (req.session.isAuth) {
         autorizado = true;
@@ -200,6 +200,37 @@ router.get('/alquilar/:id_anuncio', isAuth, async (req, res)=>{
         });
     } catch (e) {
         res.render("anuncio", {
+            error: true, 
+            mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
+});
+
+router.get('/anuncios/editar/:id_anuncio', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_anuncio = req.params.id_anuncio;
+    try {
+        const anuncioDB = await Anuncio.findById(id_anuncio); // encuentra el anuncio con esa id
+        const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
+        res.render("editar_anuncio", {
+            anuncio: anuncioDB, 
+            usuarios: arrayUsuarios,
+            error: false,
+            autorizado, 
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("editar_anuncio", {
             error: true, 
             mensaje: "No se ha encontrado el anuncio especificado",
             autorizado, 

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Editar Anuncio'}) %>
+<body>
+    
+    <!-- Barra de navegación -->
+    <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
+
+    <section class="container-fluid text-center text-sm-start align-items-center">
+        <div class="row bg-dark">
+            <div class="col">
+                <div class="container text-light text-center">
+                    <header class="d-flex justify-content-center py-3">
+                        <ul class="nav">
+                            <li class="nav-item"><a href="/admin/anuncios" class="nav-link link-light" id="admin-inicio">Volver a anuncios</a></li>
+                        </ul>
+                    </header>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-light m-2 my-3">
+            <div class="col">
+                <div class="container">
+                    <% if (error) { %>
+                        <%= mensaje %> 
+                    <% } %>
+                    <% if (!error) { %>
+                        <form class="p-3 needs-validation" novalidate data-id="<%= anuncio.id %>">
+                            <div class="row justify-content-center">
+                                <div class="col text-center">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <fieldset class="p-2">
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <img src="/img/google/description.svg" alt="logo" class="" draggable="false">
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center pb-3 px-2">
+                                    <div class="col text-center align-self-center">
+                                        <div class="h3 text-dark">Editar anuncio</div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="id_usuario" id="in-idusuario" placeholder="" value="<%= anuncio.id_usuario %> " required readonly data-idusuarioanuncio="<%= anuncio.id_usuario %>"> 
+                                            <label for="in-idusuario">ID Usuario</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="titulo" id="in-titulo" placeholder="" required value="<%= anuncio.titulo %>"> 
+                                            <label for="in-titulo">Título</label>
+                                            <div class="invalid-feedback d-none" id="err-titulo-vacio">
+                                                Debes escribir un título
+                                            </div>
+                                            <div class="invalid-feedback d-none" id="err-titulo-caracteres">
+                                                El título debe tener entre 3 y 50 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <textarea class="form-control h-100" id="in-descripcion" name="descripcion" rows="9" placeholder="" required><%= anuncio.descripcion %></textarea>
+                                            <label for="in-descripcion">Descripción</label>
+                                            <div class="invalid-feedback d-none" id="err-desc-caracteres">
+                                                La descripción debe tener entre 3 y 300 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="">
+                                            <input class="form-control" type="file" id="in-imagen" name="img">
+                                        </div>
+                                    </div>
+                                </div>    
+                            </fieldset>
+                            <fieldset class="p-2">
+                                <div class="form-text text-center">Vehículo</div>
+                                <div class="row g-3 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="matricula" id="in-matricula" placeholder="" required value="<%= anuncio.matricula %>">
+                                            <label for="in-matricula">Matrícula</label>
+                                            <div class="invalid-feedback d-none" id="err-matricula">
+                                                Introduce una matrícula válida
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <select class="form-select" id="lista-marcas" name="marca" data-marcaanuncio="<%= anuncio.marca %>">
+                                            <option value="0">Seleccionar marca</option>
+                                        </select>
+                                    </div>
+                                    <div class="col text-center align-self-center text-dark">
+                                        <select class="form-select" id="lista-modelos" name="modelo" disabled data-modeloanuncio="<%= anuncio.modelo %>">
+                                            <option value="0">Seleccionar modelo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <select class="form-select" id="lista-combustibles" name="combustible" data-combanuncio="<%= anuncio.combustible %>">
+                                            <option value="0">Seleccionar combustible</option>
+                                            <option value="Gasolina">Gasolina</option>
+                                            <option value="Diésel">Diésel</option>
+                                            <option value="Eléctrico">Eléctrico</option>
+                                            <option value="Híbrido">Híbrido</option>
+                                        </select>
+                                    </div>
+                                    <div class="col text-center align-self-center text-dark">
+                                        <select class="form-select" id="lista-transmisiones" name="transmision" data-transanuncio="<%= anuncio.transmision %>">
+                                            <option value="0">Seleccionar transmisión</option>
+                                            <option value="Manual">Manual</option>
+                                            <option value="Automático">Automático</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="p-2">
+                                <div class="form-text text-center">Detalles anuncio</div>
+                                <div class="row g-3 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" name="precio" id="in-precio" placeholder="" required value="<%= anuncio.precio %>">
+                                            <label for="in-precio">Precio por hora</label>
+                                            <div class="invalid-feedback d-none" id="err-precio">
+                                                Debes introducir un número entre 1 y 999.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="d-none">
+                                <div class="row g-3 justify-content-center p-2">
+                                    <div class="col text-center align-self-center text-dark">
+                                        <input type="datetime" name="creado" id="in-fecha" placeholder="" required readonly value="<%= anuncio.creado %>"> 
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="p-2">
+                                <div class="row justify-content-center p-2">
+                                    <div class="col-12 col-md-5 text-center text-md-end align-self-center p-2">
+                                        <a type="menu" class="btn btn-danger btn-block w-50 p-3" href="/anuncios/<%= anuncio.id %> ">
+                                            Descartar cambios
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-auto text-center align-self-center">
+                                        <button type="reset" class="btn btn-primary btn-block p-3 align-self-center p-2">
+                                            <img src="/img/google/refresh.svg" class="img-fluid">
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-5 text-center text-md-start align-self-center p-2">
+                                        <button type="submit" class="btn btn-success btn-block w-50 p-3">
+                                            Confirmar cambios
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer><%- include('./plantilla/pie'); %></footer>
+
+    <script src="/script/cargar_lista_usuarios.js"></script> <!-- Carga lista usuarios -->
+    <script src="/script/cargar_coches.js" async></script> <!-- Carga marcas y modelos -->
+    <script src="/script/cargar_desde_anuncio.js"></script> <!-- Carga modelo y transmision -->
+    <script src="/script/editar_anuncio.js" type="module"></script> <!-- Funcionalidad editar anuncio y validación -->
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
