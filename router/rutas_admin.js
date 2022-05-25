@@ -98,7 +98,7 @@ router.delete('/anuncios/eliminar/:id_anuncio', async(req,res)=>{
         console.log(error);
         res.json({
             eliminado: false,
-            mensaje: 'Ha ocurrido un error al procesar la solicitud: '+error
+            mensaje: error.toString()
         });
     }
 });
@@ -142,6 +142,7 @@ router.put('/anuncios/:id_anuncio', [
     } else {
         // si no hay errores editar anuncio
         const id_anuncio = req.params.id_anuncio;
+        req.body.id_usuario = req.body.id_usuario.trim();
         const body = req.body;
         try {
             const anuncioDB = await Anuncio.findByIdAndUpdate(id_anuncio, body, {useFindAndModify: false});
@@ -153,7 +154,7 @@ router.put('/anuncios/:id_anuncio', [
             console.log(error);
             res.json({
                 editado: false,
-                mensaje: 'Ha ocurrido un error al procesar la solicitud: '+error
+                mensaje: error.toString()
             });
         }
     }
