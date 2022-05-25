@@ -64,13 +64,16 @@ window.addEventListener("load", function(){
 
     function validarIdUsuario(){
 
-        if (!validarAnuncio.vIdUsuario(inIdUsuario.value)) {
-            sIdUsuario.classList.add("is-invalid");
-            return false;
-        } else {
-            sIdUsuario.classList.remove("is-invalid");
-            return true;
-        }
+        if(sIdUsuario){
+            if (!validarAnuncio.vIdUsuario(inIdUsuario.value)) {
+                sIdUsuario.classList.add("is-invalid");
+                return false;
+            } else {
+                sIdUsuario.classList.remove("is-invalid");
+                return true;
+            }
+        } else return true;
+        
     }
 
     function validarTitulo(){
@@ -179,7 +182,7 @@ window.addEventListener("load", function(){
 
     function okValidaciones(e){
 
-        if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() || !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()) return false;
+        if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() || !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()) return false; 
         else return true;
     }
 
