@@ -8,6 +8,7 @@ function crearModal(titulo, info, duracion, sePuedeCerrar){
     
     let modal = document.getElementById("modal");
 
+    modal.style.zIndex = 998;
     modal.innerHTML="<div id='modal-contenido' class='modal-contenido'></div>";
 
     let modalContenido = document.getElementById("modal-contenido");
