@@ -33,7 +33,7 @@ const isAuthRechazar = (req, res, next) => {
  * * ROUTING -------------------------------------------------------------------------------------
  */
 
-router.get('/', (req,res) => {
+router.get('/', async(req,res) => {
 
     if (req.session.isAuth) {
         autorizado = true;
@@ -42,7 +42,20 @@ router.get('/', (req,res) => {
         autorizado = false;
         usuarioAutentificado = null;
     }
-    res.status(200).render('index', {autorizado, usuarioAutentificado});
+
+    try {
+        const arrayAnuncios = await Anuncio.find();
+        res.status(200).render('index', {
+        autorizado,
+        usuarioAutentificado, 
+        arrayAnuncios});
+    } catch (error) {
+        res.status(200).render('index', {
+        autorizado,
+        usuarioAutentificado, 
+        arrayAnuncios: false});
+    }
+    
 });
 
 //* Sesiones //

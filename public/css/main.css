@@ -147,6 +147,14 @@ h1,h2,h3,h4,h5,.h1,.h2,.h3,.h4,.h5{
     border: 1.5px solid #868c8e8b;
     border-radius: 6px;
 }
+.tarjetaIndex{
+    width: 30% !important;
+}
+@media only screen and (max-width: 768px){
+    .tarjetaIndex{
+        width: 100% !important;
+    }
+}
 .tarjeta-titulo{
     height: 40px !important;
     font-size: 130% !important;
