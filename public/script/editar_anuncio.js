@@ -52,7 +52,11 @@ window.addEventListener("load", function(){
                 const resjson = await data.json(); // json de respuesta del servidor 
                 if (resjson.editado) {
                     console.log(resjson.mensaje);
-                    window.location.href = '/admin/anuncios';
+                    if (sIdUsuario) {
+                        window.location.href = '/admin/anuncios';
+                    }else{
+                        window.location.href = '/anuncios';
+                    }
                 } else {
                     console.log(resjson.mensaje);
                 }
