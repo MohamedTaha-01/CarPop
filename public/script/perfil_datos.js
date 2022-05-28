@@ -26,6 +26,13 @@ window.addEventListener("load", ()=>{
         inContrasena.removeAttribute("disabled");
         inTelefono.removeAttribute("disabled");
         inDireccion.removeAttribute("disabled");
+
+        inNombre.style.borderColor = '#7de2d1';
+        inApellido.style.borderColor = '#7de2d1';
+        inCorreo.style.borderColor = '#7de2d1';
+        inContrasena.style.borderColor = '#7de2d1';
+        inTelefono.style.borderColor = '#7de2d1';
+        inDireccion.style.borderColor = '#7de2d1';
     });
 
     bDescartar.addEventListener("click", (e)=>{
