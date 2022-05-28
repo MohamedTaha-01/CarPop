@@ -318,4 +318,101 @@ router.get('/perfiles/:id_usuario', isAuth, async (req, res)=>{
     }
 });
 
+router.get('/perfiles/:id_usuario/datos', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_usuario = req.params.id_usuario;
+    try {
+        const usuarioDB = await Usuario.findById(id_usuario);
+        res.render("perfil_datos", {
+            usuario: usuarioDB, 
+            error: false,
+            autorizado,
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("perfil_datos", {
+            error: true, 
+            mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
+})
+
+router.post('/perfiles/:id_usuario/datos', [
+    check('nombre', 'El nombre no puede estar vacío').trim().notEmpty(),
+    check('apellido', 'El apellido no puede estar vacío').trim().notEmpty(),
+    check('correo', 'Correo no válido').escape().isEmail().notEmpty(),
+    check('contrasena', 'Contraseña no válida').escape().notEmpty(),
+    check('telefono', 'Teléfono no válido').isMobilePhone(['es-ES']),
+    check('direccion', 'La dirección no puede estar vacía').trim().notEmpty()
+], async(req, res)=>{
+
+    const id_usuario = req.params.id_usuario;
+    const erroresVal = validationResult(req);
+    const body = req.body;
+
+    if (!erroresVal.isEmpty()) {
+
+        console.log(erroresVal);
+        return res.status(422).json({erroresVal: erroresVal.array()});
+
+    } else {
+
+        try {
+            const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
+            res.json({
+                editado: true,
+                mensaje: 'Se han modificado los datos del usuario'
+            });
+        } catch (error) {
+            console.log(error);
+            res.json({
+                editado: false,
+                mensaje: error.toString()
+            });
+        }
+        
+    }
+})
+
+router.get('/perfiles/:id_usuario/anuncios', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_usuario = req.params.id_usuario;
+    try {
+        const usuarioDB = await Usuario.findById(id_usuario);
+        const anuncioDB = await Anuncio.find({id_usuario: id_usuario});
+        res.render("perfil_anuncios", {
+            usuario: usuarioDB, 
+            anuncios: anuncioDB,
+            error: false,
+            autorizado,
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("perfil_anuncios", {
+            error: true, 
+            mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
+})
+
 module.exports = router;

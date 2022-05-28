@@ -4,9 +4,61 @@
 <body>
 
     <header><%- include('./plantilla/nav', {usuario, autorizado, usuarioAutentificado}); %></header>
-
-    <div class="p-2 container py-5" style="margin-top: 66px !important;">
-        <%= usuario.nombre %>
+    
+    <div class="p-2 container py-5 mt-2">
+        <div class="row pt-5">
+            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
+                <!-- Navegación perfil -->
+                <%- include('./plantilla/perfil_nav') %> 
+            <% } %>
+            <!-- BARRA LATERAL 
+            <div class="col-1 text-center">
+                <div class="vr h-100 bg-info"></div>
+            </div>  -->
+            <!-- Datos perfil -->
+            <div class="col-12 col-lg-9 p-4 mb-2 ps-md-5">
+                <div class="row p-1 ps-5">
+                    <div class="col d-flex flex-row justify-content-center">
+                        <div class="h3"><%= `${usuario.nombre} ${usuario.apellido}` %> </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row p-1 mt-4 ps-md-5">
+                    <div class="col p-md-4">
+                        <div class="p-3">
+                            <div class="row justify-content-center mb-3 ms-5">
+                                <div class="col text-start">
+                                    <p class="fs-5 mb-2">Correo electrónico</p>
+                                    <p><%= usuario.correo %></p>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mb-3 me-5">
+                                <div class="col text-end">
+                                    <p class="fs-5 mb-2">Teléfono</p>
+                                    <p><%= usuario.telefono %></p>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mb-3 ms-5">
+                                <div class="col text-start">
+                                    <p class="fs-5 mb-2">Dirección</p>
+                                    <p><%= usuario.direccion %></p>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mb-3 me-5">
+                                <div class="col text-end">
+                                    <p class="fs-5 mb-2">Usuario administrador</p>
+                                    <% if (usuario.admin) { %>
+                                        <p>Si</p>
+                                    <% } else { %>
+                                        <p>No</p>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer><%- include('./plantilla/pie'); %></footer>
