@@ -13,7 +13,7 @@
                     <h2 class="text-primary">¿A dónde te apetece ir?</h2>
                     <p class="my-3">¿A la playa? ¿A la montaña? ¿O mejor a la biblioteca? <br> No importa. Alquila un coche ahora y hazlo realidad.</p>
                     <% if (autorizado) { %>
-                        <a class="btn btn-primary border-0 me-1 p-3" href="/alquilar">Explorar anuncios</a>
+                        <a class="btn btn-primary border-0 me-1 p-3" href="/anuncios">Explorar anuncios</a>
                     <% } else { %>
                         <a class="btn btn-primary border-0 me-1 p-3" href="/iniciar_sesion">Inicia sesión</a>
                         <a class="btn btn-primary border-0 p-3" href="/registrarse">Regístrate</a>
@@ -84,6 +84,34 @@
             </div>
         </div>
     </section>
+
+    <% if (arrayAnuncios) { %>
+        <section class="mt-5">
+            <div class="container p-5">
+                <div class="h3 text-center">Últimos anuncios</div>
+                <div class="d-flex flex-row justify-content-between flex-wrap mt-5 py-3">
+                    <% if (arrayAnuncios) { %>
+                        <% for( let i = 0; i < 3; i++ ) { %>
+                            <a href="anuncios/<%= arrayAnuncios[i]._id %>" class="tarjeta tarjetaIndex mb-3">
+                                <img src="<%= arrayAnuncios[i].img %>" class="w-100 h-100 tarjeta-img">
+                            </a>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+    <% } else { %>
+        <section class="mt-5">
+            <div class="container p-5">
+                <div class="h3 text-center">Últimos anuncios</div>
+                <div class="d-flex flex-row justify-content-between flex-wrap mt-5 py-3">
+                    <p>No se han encontrado anuncios</p>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    
 
     <footer><%- include('./plantilla/pie'); %></footer>
 
