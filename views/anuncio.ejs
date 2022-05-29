@@ -126,7 +126,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="h3 py-3 text-dark">Reservar</div>
-                                        <form action="/anuncios/reservar" method="POST" id="form-reservar">
+                                        <form action="/anuncios/reservar" method="POST" id="form-reservar" data-reservas="<%=JSON.stringify(reservas)%>">
                                             <input class="form-control mb-3 p-3 bg-light" id="fecha-reservar" type="date" placeholder="Selecciona fecha">
                                             <button class="btn btn-block btn-primary w-100 p-3" id="b-reservar" disabled>Reservar</button>
                                             <div class="d-none"> <!-- datos a enviar  -->
@@ -184,17 +184,37 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
     <script>
+
+        const formReservar = document.getElementById("form-reservar");
+        const fechaReservar = document.getElementById("fecha-reservar");
+
         flatpickr.localize(flatpickr.l10ns.es);
+
+        if (formReservar.dataset.reservas!='') {
+            var reservas = JSON.parse(formReservar.dataset.reservas);
+            reservas.forEach(reserva => {
+                let f1 = new Date(reserva.fecha1);
+                let f2 = new Date(reserva.fecha2);
+                reserva.from = f1.toLocaleDateString('en-CA');
+                reserva.to = f2.toLocaleDateString('en-CA');
+                delete reserva._id;
+                delete reserva.id_anuncio;
+                delete reserva.id_usuario;
+                delete reserva.fecha1;
+                delete reserva.fecha2;
+                delete reserva.__v;
+            });
+        }
+
         const config={
             altInput: true,
             altFormat: "j F Y",
             dateFormat: "Y-m-d",
             minDate: "today",
-            mode: "range"
+            mode: "range",
+            disable: reservas
         }
-        const formReservar = document.getElementById("form-reservar");
-        const fechaReservar = document.getElementById("fecha-reservar");
-        
+
         const fp = flatpickr(fechaReservar, config);
 
         formReservar.addEventListener("submit", (e)=>{

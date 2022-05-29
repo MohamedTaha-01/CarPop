@@ -205,9 +205,11 @@ router.get('/anuncios/:id_anuncio', isAuth, async (req, res)=>{
     try {
         const anuncioDB = await Anuncio.findById(id_anuncio);
         const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
+        const arrayReservas = await Reserva.find({id_anuncio: id_anuncio});
         res.render("anuncio", {
             anuncio: anuncioDB,
             usuarios: arrayUsuarios,
+            reservas: arrayReservas,
             error: false,
             autorizado, 
             usuarioAutentificado
