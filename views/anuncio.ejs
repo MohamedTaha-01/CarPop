@@ -126,9 +126,15 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="h3 py-3 text-dark">Reservar</div>
-                                        <form action="" id="form-reservar">
+                                        <form action="/anuncios/reservar" method="POST" id="form-reservar">
                                             <input class="form-control mb-3 p-3 bg-light" id="fecha-reservar" type="date" placeholder="Selecciona fecha">
                                             <button class="btn btn-block btn-primary w-100 p-3" id="b-reservar" disabled>Reservar</button>
+                                            <div class="d-none"> <!-- datos a enviar  -->
+                                                <input type="text" name="reservar_id_anuncio" id="reservar_id_anuncio" value="<%= anuncio._id %>"> 
+                                                <input type="text" name="reservar_id_usuario" id="reservar_id_usuario" value="<%= usuarioAutentificado._id %>">
+                                                <input type="text" name="reservar_fecha1" id="reservar-fecha1">
+                                                <input type="text" name="reservar_fecha2" id="reservar-fecha2">
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -193,9 +199,10 @@
 
         formReservar.addEventListener("submit", (e)=>{
 
-            e.preventDefault();
-            e.stopPropagation();
-            console.log(fp.selectedDates);
+            // e.preventDefault();
+            // e.stopPropagation();
+            document.getElementById("reservar-fecha1").value = fp.selectedDates[0];
+            document.getElementById("reservar-fecha2").value = fp.selectedDates[1];
         });
         document.getElementById("fecha-reservar").addEventListener("change", ()=> {        
             if(fechaReservar.value != '' && fechaReservar.value!=null){

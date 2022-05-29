@@ -8,6 +8,7 @@ require('dotenv').config();
 // importar modelos anuncio y usuario
 const Anuncio = require('../modelo/Anuncio');
 const Usuario = require('../modelo/Usuario');
+const Reserva = require('../modelo/Reserva');
 
 let autorizado;
 let usuarioAutentificado;
@@ -249,6 +250,33 @@ router.get('/anuncios/editar/:id_anuncio', isAuth, async (req, res)=>{
             autorizado, 
             usuarioAutentificado
         });
+    }
+});
+
+router.post('/anuncios/reservar', async(req,res)=>{
+
+    req.body.reservar_fecha1 = new Date(req.body.reservar_fecha1);
+    req.body.reservar_fecha2 = new Date(req.body.reservar_fecha2);
+
+    let reserva = {
+        id_anuncio: req.body.reservar_id_anuncio,
+        id_usuario: req.body.reservar_id_usuario,
+        fecha1: req.body.reservar_fecha1,
+        fecha2: req.body.reservar_fecha2
+    };
+
+    try { //! falta mandar respuesta al cliente y validar en cliente y servidor
+        const reservaDB = new Reserva(reserva);
+        await reservaDB.save();
+        res.status(200).send({
+            error: false,
+            mensaje: "reserva correcta"
+        })
+        console.log("reserva correcta");
+    } catch (error) {
+        res.status(422).send({
+            error: error
+        })
     }
 });
 
