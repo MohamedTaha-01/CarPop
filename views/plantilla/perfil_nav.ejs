@@ -1,13 +1,25 @@
-<div class="col-12 col-lg-3 p-4">
-    <div class="row p-1">
-        <div class="col text-center text-md-start"><div class="h3">Perfil de usuario</div></div>
+<div class="col-12 col-lg-3 p-4 mt-0 mt-md-4">
+    <div class="row pb-2 pt-3 bg-secondary text-light">
+        <div class="col text-center text-md-start"><div class="h3 text-center fw-bold"><%=usuario.nombre+' '+usuario.apellido%></div></div>
     </div>
-    <div class="row p-1 mt-2">
+    <div class="row bg-primary">
         <div class="col d-flex flex-column">
-            <a href="/perfiles/<%=usuario._id%>/datos" class="btn btn-block btn-primary p-3 my-3">Datos personales</a>
-            <a href="/perfiles/<%=usuario._id%>/anuncios" class="btn btn-block btn-primary p-3 mb-3">Mis anuncios</a>
-            <a href="/perfiles/<%=usuario._id%>/favoritos" class="btn btn-block btn-primary p-3 mb-3">Favoritos</a>
-            <a href="/perfiles/<%=usuario._id%>/reservas" class="btn btn-block btn-primary p-3 mb-3">Reservas</a>
+            <a href="/perfiles/<%=usuario._id%>/datos" class="link-light p-3 my-3 fw-bold">
+                <img src="/img/google/description2.svg">
+                Datos personales
+            </a>
+            <a href="/perfiles/<%=usuario._id%>/anuncios" class="link-light p-3 mb-3 fw-bold">
+                <img src="/img/google/description2.svg">
+                Mis anuncios
+            </a>
+            <a href="/perfiles/<%=usuario._id%>/favoritos" class="link-light p-3 mb-3 fw-bold">
+                <img src="/img/google/fav_light.svg">
+                Favoritos
+            </a>
+            <a href="/perfiles/<%=usuario._id%>/reservas" class="link-light p-3 mb-3 fw-bold">
+                <img src="/img/google/description2.svg">
+                Reservas
+            </a>
         </div>
     </div>
 </div>

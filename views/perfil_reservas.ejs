@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Perfil de usuario'}) %>
+<body>
+
+    <header><%- include('./plantilla/nav', {usuario, autorizado, usuarioAutentificado}); %></header>
+    
+    <div class="p-2 container py-5 mt-2">
+        <div class="row pt-5">
+            <!-- Navegación perfil -->
+            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
+                <%- include('./plantilla/perfil_nav') %> 
+            <% } %>
+            <!-- BARRA LATERAL 
+            <div class="col-1 text-center">
+                <div class="vr h-100 bg-info"></div>
+            </div>  -->
+            <!-- Datos perfil -->
+            <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
+                <div class="row p-1 px-5">
+                    <div class="col d-flex flex-row justify-content-center">
+                        <div class="h3">Reservas</div>
+                    </div>
+                </div>
+                <div class="row p-1 mt-2 px-md-5">
+                    <div class="col p-md-4">
+                        <div class="p-3">
+                            <% reservas.forEach(reserva => { %>
+                                
+                                <% anuncios.forEach(anuncio => { %>
+
+                                    <% if (reserva.id_anuncio == anuncio._id) { %>
+                                     
+                                        <a href="/anuncios/<%= anuncio._id %>" class="tarjeta-a">
+                                            <div class="row g-0 mb-5 tarjeta">
+                                                <div class="d-none d-md-flex col-md-4 justify-content-center" style="height: 251px !important;">
+                                                    <% if (anuncio.img==null || anuncio.img=="") { %>
+                                                        <img src="img/logo/carpop_logo2.png" class="img-fluid rounded-start w-75 h-75 tarjeta-img align-self-center" style="background-color: transparent;" draggable="false">
+                                                    <% } else { %>
+                                                        <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
+                                                    <% } %>
+                                                </div>
+                                                <div class="col col-md-8" style="height: 252px !important;">
+                                                    <div class="p-2 px-3 text-dark tarjeta-titulo">
+                                                        <%= anuncio.titulo %>
+                                                    </div>
+                                                    <div class="p-2 px-3 text-dark tarjeta-descripcion d-flex flex-row justify-content-around text-center">
+                                                        <div class="my-4">
+                                                            <p class="my-1">Desde:</p>
+                                                            <p><%= reserva.fecha1.toLocaleDateString('es-ES') %></p>
+                                                        </div>
+                                                        <div class="my-4">
+                                                            <p class="my-1">Hasta:</p>
+                                                            <p><%= reserva.fecha2.toLocaleDateString('es-ES') %></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-2 px-3 text-dark tarjeta-pie d-flex flex-row justify-content-between">
+                                                        <div class="my-auto mx-1" style="overflow: hidden"><%=`Reservado el\xa0el\xa0${reserva.reservado.getDate()}/${reserva.reservado.getMonth()+1}/${reserva.reservado.getFullYear()}\xa0a\xa0las\xa0${reserva.reservado.getHours()}:${reserva.reservado.getMinutes()}:${reserva.reservado.getSeconds()}`%></div>
+                                                        <div class="fw-bold fs-6 my-auto"><%= anuncio.precio %>€/d</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                    <% } %>
+
+                                <% }) %>
+    
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><%- include('./plantilla/pie'); %></footer>
+
+    <script src="/script/animaciones_anuncios.js"></script>
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+</body>
+</html>

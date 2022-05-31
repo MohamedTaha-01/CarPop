@@ -19,13 +19,12 @@
             <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
                 <div class="row p-1 px-5">
                     <div class="col d-flex flex-row justify-content-center">
-                        <div class="h3"><%= `${usuario.nombre} ${usuario.apellido}` %> </div>
+                        <div class="h3">Moificar datos</div>
                     </div>
                 </div>
-                <hr>
-                <div class="row p-1 mt-4 px-md-5">
+                <div class="row p-1 mt-2 px-md-5">
                     <div class="col p-md-4">
-                        <form action="/perfiles/<%=usuario._id%>/datos" method="POST" class="px-3 needs-validation" novalidate>
+                        <form action="/perfiles/<%=usuario._id%>/datos" method="POST" class="px-3 needs-validation border" novalidate>
                             <div class="row justify-content-center">
                                 <div class="col text-center">
                                     <p></p>
