@@ -264,7 +264,8 @@ router.post('/anuncios/reservar', async(req,res)=>{
         id_anuncio: req.body.reservar_id_anuncio,
         id_usuario: req.body.reservar_id_usuario,
         fecha1: req.body.reservar_fecha1,
-        fecha2: req.body.reservar_fecha2
+        fecha2: req.body.reservar_fecha2,
+        reservado: new Date()
     };
 
     try { //! falta mandar respuesta al cliente y validar en cliente y servidor
@@ -452,6 +453,39 @@ router.get('/perfiles/:id_usuario/anuncios', isAuth, async (req, res)=>{
         res.render("perfil_anuncios", {
             error: true, 
             mensaje: "No se ha encontrado el anuncio especificado",
+            autorizado, 
+            usuarioAutentificado
+        });
+    }
+})
+
+router.get('/perfiles/:id_usuario/reservas', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    const id_usuario = req.params.id_usuario;
+    try {
+        const usuarioDB = await Usuario.findById(id_usuario);
+        const anuncioDB = await Anuncio.find();
+        const arrayReservas = await Reserva.find({id_usuario: id_usuario});
+        res.render("perfil_reservas", {
+            usuario: usuarioDB, 
+            anuncios: anuncioDB,
+            reservas: arrayReservas,
+            error: false,
+            autorizado,
+            usuarioAutentificado
+        });
+    } catch (e) {
+        res.render("perfil_anuncios", {
+            error: true, 
+            mensaje: "No se han encontrado reservas",
             autorizado, 
             usuarioAutentificado
         });
