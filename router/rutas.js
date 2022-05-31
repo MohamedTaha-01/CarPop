@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const {check, validationResult} = require('express-validator');
 const { findById } = require('../modelo/Anuncio');
@@ -96,13 +97,16 @@ router.post('/registrarse', [
             nombre: body.nombre,
             apellido: body.apellido,
             correo: body.correo,
-            contrasena: body.contrasena,
+            contrasena: body.contrasena.trim(),
             telefono: body.telefono,
             direccion: body.direccion,
             admin: false
         };
 
-        try { // introducir usuario creado en BBDD
+        try { // encriptar contrasena e introducir usuario creado en BBDD
+            const salt = await bcrypt.genSalt();
+            user.contrasena = await bcrypt.hash(user.contrasena, salt);
+
             const usuarioDB = new Usuario(user);
             await usuarioDB.save();
             res.redirect('/iniciar_sesion');
@@ -140,9 +144,10 @@ router.post('/iniciar_sesion', [
             return res.status(400).json({ ejecutado: false, mensaje: "No existe ningún usuario registrado con el correo proporcionado" });
 
         } else {
-            if (user.contrasena!=body.contrasena){
+            console.log(user.contrasena);
+            if (await bcrypt.compare(body.contrasena, user.contrasena)){
 
-                return res.status(400).json({ ejecutado: false, mensaje: "Contraseña incorrecta" });
+                res.status(400).json({ ejecutado: false, mensaje: "Contraseña incorrecta" });
 
             } else {
 
@@ -402,16 +407,20 @@ router.post('/perfiles/:id_usuario/datos', [
 
     const id_usuario = req.params.id_usuario;
     const erroresVal = validationResult(req);
-    const body = req.body;
-
+    
     if (!erroresVal.isEmpty()) {
-
+        
         console.log(erroresVal);
         return res.status(422).json({erroresVal: erroresVal.array()});
-
+        
     } else {
+        
+        try { //! get y update contraseña encriptada no funciona
+            const salt = await bcrypt.genSalt();
+            req.body.contrasena = req.body.contrasena.trim();
+            req.body.contrasena = await bcrypt.hash(req.body.contrasena, salt);
+            const body = req.body;
 
-        try {
             const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
             res.json({
                 editado: true,
