@@ -19,7 +19,7 @@
             <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
                 <div class="row p-1 px-5">
                     <div class="col d-flex flex-row justify-content-center">
-                        <div class="h3">Moificar datos</div>
+                        <div class="h3">Modificar datos</div>
                     </div>
                 </div>
                 <div class="row p-1 mt-2 px-md-5">
@@ -31,6 +31,7 @@
                                 </div>
                             </div>
                             <fieldset class="p-2">
+                                <legend class="fs-5">Datos personales y cuenta</legend>
                                 <div class="row g-2 justify-content-start p-2">
                                     <div class="col-12 col-md-8 align-self-center text-dark text-center">
                                         <div class="form-floating">
@@ -58,20 +59,12 @@
                                 <div class="row g-2 justify-content-end p-2">
                                     <div class="col-12 col-md-8 align-self-center text-dark text-center">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control bg-light" name="contrasena" id="in-contrasena" placeholder="" required value="<%=usuario.contrasena%>" disabled>
-                                            <label for="in-contrasena">Contraseña</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row g-2 justify-content-start p-2">
-                                    <div class="col-12 col-md-8 align-self-center text-dark text-center">
-                                        <div class="form-floating">
                                             <input type="text" class="form-control bg-light" name="telefono" id="in-telefono" placeholder="" required value="<%=usuario.telefono%>" disabled>
                                             <label for="in-telefono">Teléfono</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row g-2 justify-content-end p-2">
+                                <div class="row g-2 justify-content-start p-2">
                                     <div class="col-12 col-md-8 align-self-center text-dark text-center">
                                         <div class="form-floating">
                                             <input type="text" class="form-control bg-light" name="direccion" id="in-direccion" placeholder="" required value="<%=usuario.direccion%>" disabled>
@@ -81,7 +74,7 @@
                                 </div>
                             </fieldset>
                             <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
-                                <fieldset class="p-2 mt-5">
+                                <fieldset class="p-2 mt-3">
                                     <div class="row justify-content-center p-3" id="row-editar1">
                                         <div class="col-12 col-md-5 text-center align-self-center">
                                             <button class="btn btn-primary btn-block w-75 p-3" id="datos-editar">
@@ -104,6 +97,42 @@
                                 </fieldset>
                             <% } %>
                         </form>
+                        <!--  -->
+                        <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
+                        <form action="/perfiles/<%=usuario._id%>/contrasena" method="POST" class="mt-4 px-3 needs-validation border" novalidate>
+                            <div class="row justify-content-center">
+                                <div class="col text-center">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <fieldset class="p-2">
+                                <legend class="fs-5">Contraseña</legend>
+                                <div class="row g-2 justify-content-center p-2">
+                                    <div class="col-12 col-md-8 align-self-center text-dark text-center">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control bg-light" name="contrasena" id="in-contrasena" placeholder="" required value="" disabled>
+                                            <label for="in-contrasena">Contraseña</label>
+                                            <div id="in-contrasena" class="form-text">Introduce la nueva contraseña</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="p-2 mt-3">
+                                <div class="row justify-content-center p-3" id="row-editar1">
+                                    <div class="col-12 col-md-5 text-center align-self-center" id="div-editar">
+                                        <button class="btn btn-primary btn-block w-75 p-3" id="contrasena-editar">
+                                            Modificar contraseña
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-5 text-center align-self-center d-none" id="div-confirmar">
+                                        <button type="submit" class="btn btn-success btn-block w-75 p-3">
+                                            Confirmar cambios
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <% } %>
                     </div>
                 </div>
             </div>
