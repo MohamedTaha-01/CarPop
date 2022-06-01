@@ -144,12 +144,8 @@ router.post('/iniciar_sesion', [
             return res.status(400).json({ ejecutado: false, mensaje: "No existe ningún usuario registrado con el correo proporcionado" });
 
         } else {
-            console.log(user.contrasena);
+            
             if (await bcrypt.compare(body.contrasena, user.contrasena)){
-
-                res.status(400).json({ ejecutado: false, mensaje: "Contraseña incorrecta" });
-
-            } else {
 
                 // autorizamos sesion y guardamos el id del usuario autorizado
                 req.session.isAuth = true;
@@ -159,6 +155,11 @@ router.post('/iniciar_sesion', [
                     console.log(error);
                 }
                 res.redirect("back");
+
+            } else {
+
+                res.status(400).json({ ejecutado: false, mensaje: "Contraseña incorrecta" });
+            
             }
         }
     }
