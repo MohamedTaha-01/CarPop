@@ -401,7 +401,6 @@ router.post('/perfiles/:id_usuario/datos', [
     check('nombre', 'El nombre no puede estar vacío').trim().notEmpty(),
     check('apellido', 'El apellido no puede estar vacío').trim().notEmpty(),
     check('correo', 'Correo no válido').escape().isEmail().notEmpty(),
-    check('contrasena', 'Contraseña no válida').escape().notEmpty(),
     check('telefono', 'Teléfono no válido').isMobilePhone(['es-ES']),
     check('direccion', 'La dirección no puede estar vacía').trim().notEmpty()
 ], async(req, res)=>{
@@ -416,16 +415,48 @@ router.post('/perfiles/:id_usuario/datos', [
         
     } else {
         
-        try { //! get y update contraseña encriptada no funciona
-            const salt = await bcrypt.genSalt();
-            req.body.contrasena = req.body.contrasena.trim();
-            req.body.contrasena = await bcrypt.hash(req.body.contrasena, salt);
+        try {
             const body = req.body;
-
             const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
             res.json({
                 editado: true,
                 mensaje: 'Se han modificado los datos del usuario'
+            });
+        } catch (error) {
+            console.log(error);
+            res.json({
+                editado: false,
+                mensaje: error.toString()
+            });
+        }
+        
+    }
+})
+
+router.post('/perfiles/:id_usuario/contrasena', [
+    check('contrasena', 'Contraseña no válida').escape().notEmpty()
+], async(req, res)=>{
+
+    const id_usuario = req.params.id_usuario;
+    const erroresVal = validationResult(req);
+    
+    if (!erroresVal.isEmpty()) {
+        
+        console.log(erroresVal);
+        return res.status(422).json({erroresVal: erroresVal.array()});
+        
+    } else {
+        
+        try {
+
+            const salt = await bcrypt.genSalt();
+            req.body.contrasena = await bcrypt.hash(req.body.contrasena, salt);
+
+            const body = req.body;
+            const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
+            res.json({
+                editado: true,
+                mensaje: 'Se ha modificado la contraseña del usuario'
             });
         } catch (error) {
             console.log(error);
