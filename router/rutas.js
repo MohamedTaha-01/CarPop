@@ -5,9 +5,11 @@ const router = express.Router();
 const {check, validationResult} = require('express-validator');
 const { findById } = require('../modelo/Anuncio');
 require('dotenv').config();
-const stripe = require('stripe')(process.env.STRIPESECRET);
-const endpointSecret = 'whsec_a2adaf26c79d903ab728583b68a3110688197d3f6e6577288fde7a1084b64de8';
 const bodyParser = require('body-parser');
+const stripe = require('stripe')(process.env.STRIPESECRET);
+const endpointSecret = process.env.STRIPEWHSECRET;
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRIDKEY)
 
 // importar modelos anuncio y usuario
 const Anuncio = require('../modelo/Anuncio');
@@ -120,6 +122,20 @@ router.post('/registrarse', [
 
             const usuarioDB = new Usuario(user);
             await usuarioDB.save();
+
+            sgMail.send({
+                to: user.correo,
+                from: 'carpop531@gmail.com',
+                templateId: "d-ad8f70443ae54daba1b7005b2e49417c",
+                dynamicTemplateData: {
+                    name: user.nombre,
+                }
+            }).then(() => {
+                console.log('Email de registro enviado');
+            }).catch((error) => {
+                console.error(error);
+            })
+
             res.redirect('/iniciar_sesion');
         } catch (error) {
             console.log(error);

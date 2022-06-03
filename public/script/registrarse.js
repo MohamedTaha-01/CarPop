@@ -188,43 +188,6 @@ window.addEventListener("load", function(){
         }
     }
 
-    // function validarDiralle(){
-    //     inDircalle.value = inDircalle.value.trim();
-    //     if(inDircalle.value==null || inDircalle.value==''){
-    //         inDircalle.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDircalle.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function validarDirnumero(){
-    //     inDirnumero.value = inDirnumero.value.trim();
-    //     if(inDirnumero.value==null || inDirnumero.value==''){
-    //         inDirnumero.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDirnumero.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function validarDircp(){
-    //     inDircalle.value = inDircalle.value.trim();
-    //     if(inDircalle.value==null || inDircalle.value==''){
-    //         inDircalle.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDircalle.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function construirDireccion(){
-    //     inDireccion.value = `${inDircalle}, ${inDirnumero}, ${inDircp}`;
-    // }
-
     function enviarForumlario(e) {
 
         if(!validarEmail() || !validarContrasena() || !validarNombre() || !validarApellido() || !validarTelefono() || !validarDireccion()){
