@@ -5,6 +5,9 @@ const router = express.Router();
 const {check, validationResult} = require('express-validator');
 const { findById } = require('../modelo/Anuncio');
 require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPESECRET);
+const endpointSecret = 'whsec_a2adaf26c79d903ab728583b68a3110688197d3f6e6577288fde7a1084b64de8';
+const bodyParser = require('body-parser');
 
 // importar modelos anuncio y usuario
 const Anuncio = require('../modelo/Anuncio');
@@ -30,6 +33,28 @@ const isAuthRechazar = (req, res, next) => {
         next();
     }
 }
+router.use((req, res, next) => {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+const fulfillOrder = (session) => {
+    // TODO: fill me in
+    console.log("Fulfilling order", session);
+  }
+  
+  const createOrder = (session) => {
+    // TODO: fill me in
+    console.log("Creating order", session);
+  }
+  
+  const emailCustomerAboutFailedPayment = (session) => {
+    // TODO: fill me in
+    console.log("Emailing customer", session);
+  }
 
 /**
  * * ROUTING -------------------------------------------------------------------------------------
@@ -261,33 +286,139 @@ router.get('/anuncios/editar/:id_anuncio', isAuth, async (req, res)=>{
     }
 });
 
-router.post('/anuncios/reservar', async(req,res)=>{
+router.post('/anuncios/reservar/:id_anuncio', async(req,res)=>{
 
-    req.body.reservar_fecha1 = new Date(req.body.reservar_fecha1);
-    req.body.reservar_fecha2 = new Date(req.body.reservar_fecha2);
+    const {product} = req.body;
 
-    let reserva = {
-        id_anuncio: req.body.reservar_id_anuncio,
-        id_usuario: req.body.reservar_id_usuario,
-        fecha1: req.body.reservar_fecha1,
-        fecha2: req.body.reservar_fecha2,
-        reservado: new Date()
-    };
-
-    try { //! falta mandar respuesta al cliente y validar en cliente y servidor
-        const reservaDB = new Reserva(reserva);
-        await reservaDB.save();
-        res.status(200).send({
-            error: false,
-            mensaje: "reserva correcta"
-        })
-        console.log("reserva correcta");
-    } catch (error) {
-        res.status(422).send({
-            error: error
-        })
+    let fechas = product.description.split(",");
+    function treatAsUTC(date) {
+        var result = new Date(date);
+        result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+        return result;
     }
+    function daysBetween(startDate, endDate) {
+        var millisecondsPerDay = 24 * 60 * 60 * 1000;
+        return ((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay)+1;
+    }
+
+    try {
+
+        const anuncioDB = await Anuncio.findById(req.params.id_anuncio);
+        const diasTotal = daysBetween(fechas[0], fechas[1]);
+        let precioTotal = diasTotal*anuncioDB.precio;
+        if (diasTotal>=7) {
+            const descuento = precioTotal*0.10;
+            precioTotal = precioTotal-descuento;
+            var descripcion = `Precio por día: ${anuncioDB.precio}€ | Días totales:${diasTotal} días | Descuento: ${descuento.toFixed(2)}€ (10%) | TOTAL A PAGAR: ${precioTotal}€`;
+        } else {
+            var descripcion = `Precio por día: ${anuncioDB.precio}€ | Días totales:${diasTotal} días | TOTAL A PAGAR: ${precioTotal}€`;
+        }
+        
+
+        const stripeSession = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            customer_email: req.session.usuarioAutentificado.correo,
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'eur',
+                        product_data: {
+                            name: product.name,
+                            description: descripcion
+                        },
+                        unit_amount: precioTotal*100
+                    },
+                    quantity: product.quantity
+                }
+            ],
+            mode: 'payment',
+            success_url: `http://localhost:5000/reservar/correcta`,
+            cancel_url: `http://localhost:5000/reservar/cancelada`
+        })
+    
+        res.json({id: stripeSession.id});
+
+    } catch (error) {
+        console.log(error);
+    }
+    
 });
+
+router.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+    const payload = request.body;
+    const sig = request.headers['stripe-signature'];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    } catch (err) {
+        return response.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    switch (event.type) {
+        case 'checkout.session.completed': {
+            const session = event.data.object;
+            // Save an order in your database, marked as 'awaiting payment'
+            createOrder(session);
+
+            // Check if the order is paid (for example, from a card payment)
+            //
+            // A delayed notification payment will have an `unpaid` status, as
+            // you're still waiting for funds to be transferred from the customer's
+            // account.
+            if (session.payment_status === 'paid') {
+              fulfillOrder(session);
+            }
+            break;
+        }
+
+        case 'checkout.session.async_payment_succeeded': {
+            const session = event.data.object;
+        
+            // Fulfill the purchase...
+            fulfillOrder(session);
+            break;
+        }
+
+        case 'checkout.session.async_payment_failed': {
+            const session = event.data.object;
+        
+            // Send an email to the customer asking them to retry their order
+            emailCustomerAboutFailedPayment(session);
+            break;
+        }
+    }
+
+    response.status(200);
+});
+
+router.get('/reservar/correcta', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(200).render('correcta.ejs');
+})
+
+router.get('/reservar/cancelada', isAuth, async (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(400).render('cancelada.ejs');
+})
+
 
 router.get('/crear_anuncio', isAuth, async(req,res)=>{
 

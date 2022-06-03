@@ -10,8 +10,8 @@
         <div class="col p-1 py-md-3">
             <div class="row my-3 mb-4">
                 <div class="col d-flex justify-content-between">
-                    <div class="h3"><%= anuncio.titulo %></div>
-                    <div class="h3"><%= anuncio.precio %>€/d</div>
+                    <div class="h3" id="titulo-producto"><%= anuncio.titulo %></div>
+                    <div class="h3"><span id="precio-producto"><%= anuncio.precio %></span>€/d</div>
                 </div>
             </div>
             <hr class="mb-5">
@@ -125,16 +125,10 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="h3 py-3 text-dark">Reservar</div>
-                                        <form action="/anuncios/reservar" method="POST" id="form-reservar" data-reservas="<%=JSON.stringify(reservas)%>">
+                                        <form action="?" method="POST" id="form-reservar" data-reservas="<%=JSON.stringify(reservas)%>">
                                             <input class="form-control mb-3 p-3 bg-light" id="fecha-reservar" type="date" placeholder="Selecciona fecha">
-                                            <button class="btn btn-block btn-primary w-100 p-3" id="b-reservar" disabled>Reservar</button>
-                                            <div class="d-none"> <!-- datos a enviar  -->
-                                                <input type="text" name="reservar_id_anuncio" id="reservar_id_anuncio" value="<%= anuncio._id %>"> 
-                                                <input type="text" name="reservar_id_usuario" id="reservar_id_usuario" value="<%= usuarioAutentificado._id %>">
-                                                <input type="text" name="reservar_fecha1" id="reservar-fecha1">
-                                                <input type="text" name="reservar_fecha2" id="reservar-fecha2">
-                                            </div>
                                         </form>
+                                        <button type="button" class="btn btn-block btn-primary w-100 p-3" id="b-reservar" data-idanuncio="<%= anuncio.id %>">Reservar</button>
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -209,7 +203,7 @@
         const config={
             altInput: true,
             altFormat: "j F Y",
-            dateFormat: "Y-m-d",
+            dateFormat: "j F Y",
             minDate: "today",
             mode: "range",
             disable: reservas
@@ -217,19 +211,56 @@
 
         const fp = flatpickr(fechaReservar, config);
 
-        formReservar.addEventListener("submit", (e)=>{
+        // formReservar.addEventListener("submit", (e)=>{
 
-            // e.preventDefault();
-            // e.stopPropagation();
-            document.getElementById("reservar-fecha1").value = fp.selectedDates[0];
-            document.getElementById("reservar-fecha2").value = fp.selectedDates[1];
-        });
-        document.getElementById("fecha-reservar").addEventListener("change", ()=> {        
-            if(fechaReservar.value != '' && fechaReservar.value!=null){
-                document.getElementById("b-reservar").removeAttribute("disabled");
-            } else {
-                document.getElementById("b-reservar").setAttribute("disabled","");
-            }
+        //     // e.preventDefault();
+        //     // e.stopPropagation();
+        //     document.getElementById("reservar-fecha1").value = fp.selectedDates[0].toLocaleDateString('en-CA');
+        //     document.getElementById("reservar-fecha2").value = fp.selectedDates[1].toLocaleDateString('en-CA');
+        // });
+        // document.getElementById("fecha-reservar").addEventListener("change", ()=> {        
+        //     if(fechaReservar.value != '' && fechaReservar.value!=null){
+        //         document.getElementById("b-reservar").removeAttribute("disabled");
+        //     } else {
+        //         document.getElementById("b-reservar").setAttribute("disabled","");
+        //     }
+        // });
+    </script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        const stripe = Stripe("pk_test_51L5wvtGx1IPd1SQV4gDmig0sE1Z1wwLLJ0TLaLcM90wRvcyOHmWs6CfjVm0pQtGJFi1hkriEVWV8yZ8l2b9lYXek00Ai5qqn52");
+        const bReservar = document.getElementById("b-reservar");
+        const titulo = document.getElementById("titulo-producto").innerText;
+        const precio = document.getElementById("precio-producto").innerText;
+
+        bReservar.addEventListener("click", function(e){
+
+            e.preventDefault();
+
+            const fechas = fp.selectedDates[0].toLocaleDateString('en-CA')+","+fp.selectedDates[1].toLocaleDateString('en-CA');
+
+            fetch(`/anuncios/reservar/${bReservar.dataset.idanuncio}`, {
+                headers: {"Content-Type": "application/json"},
+                method: "POST",
+                body: JSON.stringify({
+                    product: {
+                        name: titulo,
+                        description: fechas,
+                        amount: precio,
+                        quantity: 1
+                    }
+                })
+            }).then(function (response) {
+                return response.json();
+            }).then(function (session) {
+                return stripe.redirectToCheckout({sessionId: session.id})
+            }).then(function (result) {
+                if (result.error) {
+                    console.log((result.error.message));
+                }
+            }).catch(function (error) {
+                console.log("Error", error)
+            })
         });
     </script>
     <script src="/script/eliminar_anuncio.js" type="module"></script>
