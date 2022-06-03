@@ -128,7 +128,7 @@
                                         <form action="?" method="POST" id="form-reservar" data-reservas="<%=JSON.stringify(reservas)%>">
                                             <input class="form-control mb-3 p-3 bg-light" id="fecha-reservar" type="date" placeholder="Selecciona fecha">
                                         </form>
-                                        <button type="button" class="btn btn-block btn-primary w-100 p-3" id="b-reservar" data-idanuncio="<%= anuncio.id %>">Reservar</button>
+                                        <button type="button" class="btn btn-block btn-primary w-100 p-3" id="b-reservar" data-idanuncio="<%= anuncio.id %>" data-idusuario="<%= usuarioAutentificado._id %>">Reservar</button>
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -176,7 +176,8 @@
     <script src="/script/ir_arriba.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
-    <script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
 
         const formReservar = document.getElementById("form-reservar");
         const fechaReservar = document.getElementById("fecha-reservar");
@@ -203,7 +204,7 @@
         const config={
             altInput: true,
             altFormat: "j F Y",
-            dateFormat: "j F Y",
+            dateFormat: "Y-m-d",
             minDate: "today",
             mode: "range",
             disable: reservas
@@ -211,23 +212,8 @@
 
         const fp = flatpickr(fechaReservar, config);
 
-        // formReservar.addEventListener("submit", (e)=>{
+        // stripe
 
-        //     // e.preventDefault();
-        //     // e.stopPropagation();
-        //     document.getElementById("reservar-fecha1").value = fp.selectedDates[0].toLocaleDateString('en-CA');
-        //     document.getElementById("reservar-fecha2").value = fp.selectedDates[1].toLocaleDateString('en-CA');
-        // });
-        // document.getElementById("fecha-reservar").addEventListener("change", ()=> {        
-        //     if(fechaReservar.value != '' && fechaReservar.value!=null){
-        //         document.getElementById("b-reservar").removeAttribute("disabled");
-        //     } else {
-        //         document.getElementById("b-reservar").setAttribute("disabled","");
-        //     }
-        // });
-    </script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
         const stripe = Stripe("pk_test_51L5wvtGx1IPd1SQV4gDmig0sE1Z1wwLLJ0TLaLcM90wRvcyOHmWs6CfjVm0pQtGJFi1hkriEVWV8yZ8l2b9lYXek00Ai5qqn52");
         const bReservar = document.getElementById("b-reservar");
         const titulo = document.getElementById("titulo-producto").innerText;
@@ -261,6 +247,25 @@
             }).catch(function (error) {
                 console.log("Error", error)
             })
+
+            fetch(`/reservabbdd`, {
+                headers: {"Content-Type": "application/json"},
+                method: "POST",
+                body: JSON.stringify({
+                    reservaDB: {
+                        id_anuncio: bReservar.dataset.idanuncio,
+                        id_usuario: bReservar.dataset.idusuario,
+                        fecha1: fp.selectedDates[0].toLocaleDateString('en-CA'),
+                        fecha2: fp.selectedDates[1].toLocaleDateString('en-CA'),
+                        reservado: new Date
+                    }
+                })
+            }).then(function (resultado) {
+                console.log(resultado);
+            }).catch(function (error) {
+                console.log(error);
+            }) 
+            
         });
     </script>
     <script src="/script/eliminar_anuncio.js" type="module"></script>

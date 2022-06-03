@@ -41,20 +41,6 @@ router.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-const fulfillOrder = (session) => {
-    // TODO: fill me in
-    console.log("Fulfilling order", session);
-  }
-  
-  const createOrder = (session) => {
-    // TODO: fill me in
-    console.log("Creating order", session);
-  }
-  
-  const emailCustomerAboutFailedPayment = (session) => {
-    // TODO: fill me in
-    console.log("Emailing customer", session);
-  }
 
 /**
  * * ROUTING -------------------------------------------------------------------------------------
@@ -344,6 +330,16 @@ router.post('/anuncios/reservar/:id_anuncio', async(req,res)=>{
     
 });
 
+router.post('/reservabbdd', async(req, res) => {
+    const {reservaDB} = req.body;
+    try {
+        const reserva = new Reserva(reservaDB);
+        await reserva.save();
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 router.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
     const payload = request.body;
     const sig = request.headers['stripe-signature'];
@@ -359,33 +355,22 @@ router.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, re
     switch (event.type) {
         case 'checkout.session.completed': {
             const session = event.data.object;
-            // Save an order in your database, marked as 'awaiting payment'
-            createOrder(session);
-
-            // Check if the order is paid (for example, from a card payment)
-            //
-            // A delayed notification payment will have an `unpaid` status, as
-            // you're still waiting for funds to be transferred from the customer's
-            // account.
+            console.log("Creating order", session);
             if (session.payment_status === 'paid') {
-              fulfillOrder(session);
+                console.log("Fulfilling order", session);
             }
             break;
         }
 
         case 'checkout.session.async_payment_succeeded': {
             const session = event.data.object;
-        
-            // Fulfill the purchase...
-            fulfillOrder(session);
+            console.log("Fulfilling order", session);
             break;
         }
 
         case 'checkout.session.async_payment_failed': {
             const session = event.data.object;
-        
-            // Send an email to the customer asking them to retry their order
-            emailCustomerAboutFailedPayment(session);
+            console.log("Emailing customer", session);
             break;
         }
     }
