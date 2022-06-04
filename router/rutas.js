@@ -159,7 +159,6 @@ router.post('/iniciar_sesion', [
 
     if (!erroresVal.isEmpty()) {
 
-        console.log(erroresVal);
         return res.status(422).json({erroresVal: erroresVal.array()});
 
     } else {
@@ -178,15 +177,13 @@ router.post('/iniciar_sesion', [
                 req.session.isAuth = true;
                 try {
                     req.session.usuarioAutentificado = await Usuario.findById(user._id.toString());
+                    res.status(200).json({ estado: true });
                 } catch (error) {
                     console.log(error);
                 }
-                res.redirect("back");
 
             } else {
-
-                res.status(400).json({ ejecutado: false, mensaje: "Contraseña incorrecta" });
-            
+                res.status(400).json({ estado: false, mensaje: "Contraseña incorrecta" });
             }
         }
     }

@@ -1,3 +1,5 @@
+import {crearModal} from './modal.js';
+
 window.addEventListener("load", function(){
 
     document.getElementsByTagName('form')[0].addEventListener("submit", enviarForumlario);
@@ -35,13 +37,33 @@ window.addEventListener("load", function(){
     }
 
     function enviarForumlario(e) {
+        
+        e.preventDefault();
+        e.stopPropagation();
 
         if(!validarEmail() || !validarContrasena()){
-            e.preventDefault();
-            e.stopPropagation();
             return false;
         } else {
-            return true;
+            fetch('/iniciar_sesion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correo: inEmail.value,
+                    contrasena: inContrasena.value
+                })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.estado) {
+                    location.href = '/';
+                }else{
+                    crearModal("Error", data.mensaje, 3000, true);
+                }
+            })
+            .catch((error)=>{
+                crearModal("Error", data.mensaje, 3000, true);
+            })
         }
     }
 
