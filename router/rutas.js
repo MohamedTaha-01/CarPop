@@ -81,32 +81,33 @@ router.get('/registrarse', isAuthRechazar, (req, res)=>{
 });
 
 router.post('/registrarse', [
-    check('nombre', 'El nombre no puede estar vacío').trim().notEmpty(),
-    check('apellido', 'El apellido no puede estar vacío').trim().notEmpty(),
-    check('correo', 'Correo no válido').escape().isEmail().notEmpty().custom(async (correo) => {
+    check('nombre', 'El campo nombre no puede estar vacío').trim().notEmpty(),
+    check('apellido', 'El campo apellido no puede estar vacío').trim().notEmpty(),
+    check('correo', 'El correo no es un correo válido o ya está en uso').escape().isEmail().notEmpty().custom(async (correo) => {
         const correoExiste = await Usuario.findOne({ correo })
         if (correoExiste) {
             throw new Error('El correo introducido ya está en uso')
         }
     }),
-    check('contrasena', 'Contraseña no válida').escape().notEmpty(),
-    check('telefono', 'Teléfono no válido').isMobilePhone(['es-ES']),
-    check('direccion', 'La dirección no puede estar vacía').trim().notEmpty()
+    check('contrasena', 'El campo contraseña no puede estar vacío').escape().notEmpty(),
+    check('telefono', 'El teléfono introducido no es válido').isMobilePhone(['es-ES']),
+    check('direccion', 'El campo dirección no puede estar vacío').trim().notEmpty()
 ], async(req, res)=>{
     
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
 
     if (!erroresVal.isEmpty()) {
 
-        // si hay errores validacion enviar un json con los errores
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()});
+        res.status(422).json({ estado: false, mensaje: stringErrores});
 
-    } else { // si no hay errores validacion continuar
+    } else {
 
         const body = req.body;
 
-        let user = { // crear usuario con los datos recogidos
+        let user = {
             nombre: body.nombre,
             apellido: body.apellido,
             correo: body.correo,
@@ -116,7 +117,7 @@ router.post('/registrarse', [
             admin: false
         };
 
-        try { // encriptar contrasena e introducir usuario creado en BBDD
+        try { // encriptar contrasena e introducir usuario creado en BBDD, mandar correo de bienvenida
             const salt = await bcrypt.genSalt();
             user.contrasena = await bcrypt.hash(user.contrasena, salt);
 
@@ -136,11 +137,11 @@ router.post('/registrarse', [
                 console.error(error);
             })
 
-            res.redirect('/iniciar_sesion');
-        } catch (error) {
-            console.log(error);
-        }
+            res.status(200).redirect('/iniciar_sesion');
 
+        } catch (error) {
+            res.status(500).json({ estado: false, mensaje: error});
+        }
     }
 });
 
@@ -155,11 +156,14 @@ router.post('/iniciar_sesion', [
 ], async(req, res)=>{
 
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
     const body = req.body;
 
     if (!erroresVal.isEmpty()) {
 
-        return res.status(422).json({erroresVal: erroresVal.array()});
+        res.status(422).json({estado: false, mensaje: stringErrores});
 
     } else {
 
@@ -167,7 +171,7 @@ router.post('/iniciar_sesion', [
         
         if (!user){
 
-            return res.status(400).json({ ejecutado: false, mensaje: "No existe ningún usuario registrado con el correo proporcionado" });
+            res.status(422).json({ estado: false, mensaje: "No existe ningún usuario registrado con el correo proporcionado" });
 
         } else {
             
@@ -183,7 +187,7 @@ router.post('/iniciar_sesion', [
                 }
 
             } else {
-                res.status(400).json({ estado: false, mensaje: "Contraseña incorrecta" });
+                res.status(422).json({ estado: false, mensaje: "Contraseña incorrecta" });
             }
         }
     }
