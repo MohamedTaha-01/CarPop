@@ -215,9 +215,27 @@ router.get('/anuncios', isAuth, async (req, res)=>{
         usuarioAutentificado = null;
     }
 
+    let filtro = {};
+    if(req.query.combustible){
+        filtro['combustible'] = req.query.combustible;
+    }
+    if(req.query.transmision){
+        filtro['transmision'] = req.query.transmision;
+    }
+    let precios = {};
+    if(req.query.preciomin){
+        precios['$gt'] = parseInt(req.query.preciomin);
+    }
+    if(req.query.preciomax){
+        precios['$lt'] = parseInt(req.query.preciomax)+1;
+    }
+    if (req.query.preciomin || req.query.preciomax) {
+        filtro['precio'] = precios;
+    }
+
     try {
-        const arrayUsuarios = await Usuario.find(); // encuentra la coleccion usuario
-        const arrayAnuncios = await Anuncio.find(); // encuentra la coleccion anuncios
+        const arrayUsuarios = await Usuario.find();
+        const arrayAnuncios = await Anuncio.find(filtro);
         res.status(200).render("anuncios", {usuarios: arrayUsuarios, anuncios: arrayAnuncios, autorizado, usuarioAutentificado});
     } catch (error) {
         console.log(error);
