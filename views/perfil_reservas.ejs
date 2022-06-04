@@ -8,9 +8,7 @@
     <div class="p-2 container py-5 mt-2">
         <div class="row pt-5">
             <!-- Navegación perfil -->
-            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
-                <%- include('./plantilla/perfil_nav') %> 
-            <% } %>
+            <%- include('./plantilla/perfil_nav', {usuario, usuarioAutentificado}) %> 
             <!-- BARRA LATERAL 
             <div class="col-1 text-center">
                 <div class="vr h-100 bg-info"></div>
@@ -68,7 +66,7 @@
     
                             <% }) %>
                             <% if (reservas.length<1) { %>
-                                <p>No se han encontrado reservas</p>
+                                <p class="text-center" style="height: 50vh;">No se han encontrado reservas</p>
                             <% } %>
                         </div>
                     </div>

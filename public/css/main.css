@@ -120,14 +120,6 @@ h1,h2,h3,h4,h5,.h1,.h2,.h3,.h4,.h5{
   background-color: #68DECA;
 }
 
-/* Alquilar.ejs */
-.filtros{
-    -webkit-box-shadow: 5px 0px 35px 5px rgba(0,0,0,0.6); 
-    box-shadow: 5px 0px 35px 5px rgba(0,0,0,0.6);
-    position: relative;
-    top: -5px;
-}
-
 /* x cerrar pantalla iniciar sesión y registrarse*/
 .x-cerrar {
     color: rgba(255,255,255,.75);

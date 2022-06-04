@@ -8,9 +8,7 @@
     <div class="p-2 container py-5 mt-2">
         <div class="row pt-5">
             <!-- Navegación perfil -->
-            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
-                <%- include('./plantilla/perfil_nav') %> 
-            <% } %>
+            <%- include('./plantilla/perfil_nav', {usuario, usuarioAutentificado}) %> 
             <!-- BARRA LATERAL 
             <div class="col-1 text-center">
                 <div class="vr h-100 bg-info"></div>
@@ -19,7 +17,11 @@
             <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
                 <div class="row p-1 px-5">
                     <div class="col d-flex flex-row justify-content-center">
-                        <div class="h3">Modificar datos</div>
+                        <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
+                            <div class="h3">Modificar datos</div>
+                        <% } else { %>
+                            <div class="h3">Datos del perfil</div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="row p-1 mt-2 px-md-5">

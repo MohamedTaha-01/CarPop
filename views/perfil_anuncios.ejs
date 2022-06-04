@@ -8,9 +8,7 @@
     <div class="p-2 container py-5 mt-2">
         <div class="row pt-5">
             <!-- Navegación perfil -->
-            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
-                <%- include('./plantilla/perfil_nav') %> 
-            <% } %>
+            <%- include('./plantilla/perfil_nav', {usuario, usuarioAutentificado}) %>
             <!-- BARRA LATERAL 
             <div class="col-1 text-center">
                 <div class="vr h-100 bg-info"></div>
@@ -19,7 +17,7 @@
             <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
                 <div class="row p-1 px-5">
                     <div class="col d-flex flex-row justify-content-center">
-                        <div class="h3">Mis anuncios</div>
+                        <div class="h3">Anuncios</div>
                     </div>
                 </div>
                 <div class="row p-1 mt-2 px-md-5">
@@ -31,7 +29,7 @@
                                     <div class="row g-0 mb-5 tarjeta">
                                         <div class="d-none d-md-flex col-md-4 justify-content-center" style="height: 251px !important;">
                                             <% if (anuncio.img==null || anuncio.img=="") { %>
-                                                <img src="img/logo/carpop_logo2.png" class="img-fluid rounded-start w-75 h-75 tarjeta-img align-self-center" style="background-color: transparent;" draggable="false">
+                                                <img src="/img/logo/carpop_logo2.png" class="img-fluid rounded-start w-75 h-75 tarjeta-img align-self-center" style="background-color: transparent;" draggable="false">
                                             <% } else { %>
                                                 <img src="<%= anuncio.img %>" class="img-fluid rounded-start w-100 h-100 tarjeta-img" draggable="false">
                                             <% } %>
@@ -54,7 +52,7 @@
     
                             <% }) %>
                             <% if (anuncios.length<1) { %>
-                                <p>No se han encontrado anuncios</p>
+                                <p class="text-center" style="height: 50vh;">No se han encontrado anuncios</p>
                             <% } %>
                         </div>
                     </div>

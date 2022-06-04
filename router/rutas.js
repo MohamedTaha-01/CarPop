@@ -309,11 +309,12 @@ router.post('/anuncios/reservar/:id_anuncio', async(req,res)=>{
         const diasTotal = daysBetween(fechas[0], fechas[1]);
         let precioTotal = diasTotal*anuncioDB.precio;
         if (diasTotal>=7) {
-            const descuento = precioTotal*0.10;
+            var descuento = precioTotal*0.10;
             precioTotal = precioTotal-descuento;
             var descripcion = `Precio por día: ${anuncioDB.precio}€ | Días totales:${diasTotal} días | Descuento: ${descuento.toFixed(2)}€ (10%) | TOTAL A PAGAR: ${precioTotal}€`;
         } else {
             var descripcion = `Precio por día: ${anuncioDB.precio}€ | Días totales:${diasTotal} días | TOTAL A PAGAR: ${precioTotal}€`;
+            var descuento = 0;
         }
         
 
@@ -336,6 +337,25 @@ router.post('/anuncios/reservar/:id_anuncio', async(req,res)=>{
             mode: 'payment',
             success_url: `http://localhost:5000/reservar/correcta`,
             cancel_url: `http://localhost:5000/reservar/cancelada`
+        })
+
+        sgMail.send({
+            to: req.session.usuarioAutentificado.correo,
+            from: 'carpop531@gmail.com',
+            templateId: "d-8ee95e9d58ef4220b0882ab56222a3f0",
+            dynamicTemplateData: {
+                tituloanuncio: product.name,
+                resdesde: new Date(fechas[0]).toLocaleDateString('es-ES'),
+                reshasta: new Date(fechas[1]).toLocaleDateString('es-ES'),
+                resdias: diasTotal,
+                preciodia: anuncioDB.precio,
+                descuento: descuento.toFixed(2),
+                preciototal: precioTotal
+            }
+        }).then(() => {
+            console.log('Email de reserva enviado');
+        }).catch((error) => {
+            console.error(error);
         })
     
         res.json({id: stripeSession.id});
@@ -471,34 +491,34 @@ router.post('/crear_anuncio', [
 
 //* Perfiles //
 
-router.get('/perfiles/:id_usuario', isAuth, async (req, res)=>{
+// router.get('/perfiles/:id_usuario', isAuth, async (req, res)=>{
 
-    if (req.session.isAuth) {
-        autorizado = true;
-        usuarioAutentificado = req.session.usuarioAutentificado;
-    } else {
-        autorizado = false;
-        usuarioAutentificado = null;
-    }
+//     if (req.session.isAuth) {
+//         autorizado = true;
+//         usuarioAutentificado = req.session.usuarioAutentificado;
+//     } else {
+//         autorizado = false;
+//         usuarioAutentificado = null;
+//     }
 
-    const id_usuario = req.params.id_usuario;
-    try {
-        const usuarioDB = await Usuario.findById(id_usuario);
-        res.render("perfil", {
-            usuario: usuarioDB, 
-            error: false,
-            autorizado,
-            usuarioAutentificado
-        });
-    } catch (e) {
-        res.render("perfil", {
-            error: true, 
-            mensaje: "No se ha encontrado el anuncio especificado",
-            autorizado, 
-            usuarioAutentificado
-        });
-    }
-});
+//     const id_usuario = req.params.id_usuario;
+//     try {
+//         const usuarioDB = await Usuario.findById(id_usuario);
+//         res.render("perfil", {
+//             usuario: usuarioDB, 
+//             error: false,
+//             autorizado,
+//             usuarioAutentificado
+//         });
+//     } catch (e) {
+//         res.render("perfil", {
+//             error: true, 
+//             mensaje: "No se ha encontrado el anuncio especificado",
+//             autorizado, 
+//             usuarioAutentificado
+//         });
+//     }
+// });
 
 router.get('/perfiles/:id_usuario/datos', isAuth, async (req, res)=>{
 
@@ -663,6 +683,55 @@ router.get('/perfiles/:id_usuario/reservas', isAuth, async (req, res)=>{
             usuarioAutentificado
         });
     }
+})
+
+router.get('/funciona', (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(200).render('funciona', {autorizado, usuarioAutentificado});
+})
+router.get('/normas', (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(200).render('normas', {autorizado, usuarioAutentificado});
+})
+router.get('/preguntas', (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(200).render('preguntas', {autorizado, usuarioAutentificado});
+})
+router.get('/contacto', (req, res)=>{
+
+    if (req.session.isAuth) {
+        autorizado = true;
+        usuarioAutentificado = req.session.usuarioAutentificado;
+    } else {
+        autorizado = false;
+        usuarioAutentificado = null;
+    }
+
+    res.status(200).render('contacto', {autorizado, usuarioAutentificado});
 })
 
 module.exports = router;
