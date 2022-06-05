@@ -10,12 +10,14 @@
             </a>
             <a href="/perfiles/<%=usuario._id%>/anuncios" class="link-light p-3 mb-3 fw-bold">
                 <img src="/img/google/description2.svg">
-                Mis anuncios
+                Anuncios
             </a>
+            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
             <a href="/perfiles/<%=usuario._id%>/reservas" class="link-light p-3 mb-3 fw-bold">
                 <img src="/img/google/description2.svg">
                 Reservas
             </a>
+            <% } %>
         </div>
     </div>
 </div>

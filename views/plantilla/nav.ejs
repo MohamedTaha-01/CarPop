@@ -47,7 +47,7 @@
             <ul class="navbar-nav">
                 <% if (autorizado) { %>
                     <li class="navbar-item">
-                        <a href="/perfiles/<%= usuarioAutentificado._id %> " class="nav-link"> <%= usuarioAutentificado.nombre+' '+usuarioAutentificado.apellido.substr(0,1)+'.' %> </a>
+                        <a href="/perfiles/<%= usuarioAutentificado._id %>/datos" class="nav-link"> <%= usuarioAutentificado.nombre+' '+usuarioAutentificado.apellido.substr(0,1)+'.' %> </a>
                     </li>
                     <li class="navbar-item">
                         <a href="/cerrar_sesion" class="nav-link">

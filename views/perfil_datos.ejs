@@ -8,9 +8,7 @@
     <div class="p-2 container py-5 mt-2">
         <div class="row pt-5">
             <!-- Navegación perfil -->
-            <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
-                <%- include('./plantilla/perfil_nav') %> 
-            <% } %>
+            <%- include('./plantilla/perfil_nav', {usuario, usuarioAutentificado}) %> 
             <!-- BARRA LATERAL 
             <div class="col-1 text-center">
                 <div class="vr h-100 bg-info"></div>
@@ -19,7 +17,11 @@
             <div class="col-12 col-lg-9 p-4 mb-2 px-md-5">
                 <div class="row p-1 px-5">
                     <div class="col d-flex flex-row justify-content-center">
-                        <div class="h3">Modificar datos</div>
+                        <% if (usuario._id.toString() == usuarioAutentificado._id.toString()) { %>
+                            <div class="h3">Modificar datos</div>
+                        <% } else { %>
+                            <div class="h3">Datos del perfil</div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="row p-1 mt-2 px-md-5">
@@ -53,6 +55,9 @@
                                         <div class="form-floating">
                                             <input type="text" class="form-control bg-light" name="correo" id="in-correo" placeholder="" required value="<%=usuario.correo%>" disabled>
                                             <label for="in-correo">Correo</label>
+                                            <div class="invalid-feedback d-none" id="err-correo">
+                                                El correo introducido no es un correo válido
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,6 +66,9 @@
                                         <div class="form-floating">
                                             <input type="text" class="form-control bg-light" name="telefono" id="in-telefono" placeholder="" required value="<%=usuario.telefono%>" disabled>
                                             <label for="in-telefono">Teléfono</label>
+                                            <div class="invalid-feedback d-none" id="err-telefono">
+                                                El teléfono introducido no es válido
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -69,6 +77,9 @@
                                         <div class="form-floating">
                                             <input type="text" class="form-control bg-light" name="direccion" id="in-direccion" placeholder="" required value="<%=usuario.direccion%>" disabled>
                                             <label for="in-direccion">Dirección</label>
+                                            <div class="invalid-feedback d-none" id="err-direccion">
+                                                El campo dirección no puede estar vacío
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -110,22 +121,32 @@
                                 <div class="row g-2 justify-content-center p-2">
                                     <div class="col-12 col-md-8 align-self-center text-dark text-center">
                                         <div class="form-floating">
-                                            <input type="password" class="form-control bg-light" name="contrasena" id="in-contrasena" placeholder="" required value="" disabled>
+                                            <input type="password" class="form-control bg-light" name="contrasena" id="in-contrasena" placeholder="" value="" required disabled>
                                             <label for="in-contrasena">Contraseña</label>
-                                            <div id="in-contrasena" class="form-text">Introduce la nueva contraseña</div>
+                                            <div class="invalid-feedback d-none" id="err-contrasena">
+                                                El campo contraseña no puede estar vacío
+                                            </div>
+                                            <div id="info-contrasena" class="form-text">Introduce la nueva contraseña</div>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <fieldset class="p-2 mt-3">
-                                <div class="row justify-content-center p-3" id="row-editar1">
+                                <div class="row justify-content-center p-3" id="row-editar-contrasena">
                                     <div class="col-12 col-md-5 text-center align-self-center" id="div-editar">
                                         <button class="btn btn-primary btn-block w-75 p-3" id="contrasena-editar">
                                             Modificar contraseña
                                         </button>
                                     </div>
-                                    <div class="col-12 col-md-5 text-center align-self-center d-none" id="div-confirmar">
-                                        <button type="submit" class="btn btn-success btn-block w-75 p-3">
+                                </div>
+                                <div class="row justify-content-center p-3 d-none" id="modificar-contrasena">
+                                    <div class="col-12 col-md-5 text-center text-md-end align-self-center" id="descartar-contrasena">
+                                        <button class="btn btn-danger btn-block w-75 p-3 mb-3 mb-md-0" type="reset">
+                                            Descartar cambios
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-5 text-center text-md-start align-self-center" id="div-confirmar">
+                                        <button type="submit" class="btn btn-success btn-block w-75 p-3" id="contrasena-confirmar" data-idusuario="<%=usuario._id%>">
                                             Confirmar cambios
                                         </button>
                                     </div>
@@ -141,7 +162,7 @@
 
     <footer><%- include('./plantilla/pie'); %></footer>
 
-    <script src="/script/perfil_datos.js"></script>
+    <script src="/script/perfil_datos.js" type="module"></script>
     <script src="/script/ir_arriba.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     

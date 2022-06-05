@@ -1,3 +1,5 @@
+import {crearModal} from './modal.js';
+
 window.addEventListener("load", function(){
     
     let valorSeguridad=0;
@@ -14,10 +16,6 @@ window.addEventListener("load", function(){
     let inNombre = document.getElementById("in-nombre");
     let inApellido = document.getElementById("in-apellido");
     let inTelefono = document.getElementById("in-telefono");
-    // dirección
-    // let inDircalle = this.document.getElementById("in-dircalle");
-    // let inDirnumero = this.document.getElementById("in-dirnumero");
-    // let inDircp = this.document.getElementById("in-dircp");
     let inDireccion = this.document.getElementById("in-direccion");
     // Boton mostrar contrasena
     let bMostrar = this.document.getElementById("b-mostrar-contra");
@@ -188,51 +186,38 @@ window.addEventListener("load", function(){
         }
     }
 
-    // function validarDiralle(){
-    //     inDircalle.value = inDircalle.value.trim();
-    //     if(inDircalle.value==null || inDircalle.value==''){
-    //         inDircalle.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDircalle.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function validarDirnumero(){
-    //     inDirnumero.value = inDirnumero.value.trim();
-    //     if(inDirnumero.value==null || inDirnumero.value==''){
-    //         inDirnumero.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDirnumero.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function validarDircp(){
-    //     inDircalle.value = inDircalle.value.trim();
-    //     if(inDircalle.value==null || inDircalle.value==''){
-    //         inDircalle.classList.add("is-invalid");
-    //         return false;
-    //     } else {
-    //         inDircalle.classList.remove("is-invalid");
-    //         construirDireccion();
-    //         return true;
-    //     }
-    // }
-    // function construirDireccion(){
-    //     inDireccion.value = `${inDircalle}, ${inDirnumero}, ${inDircp}`;
-    // }
-
     function enviarForumlario(e) {
-
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
         if(!validarEmail() || !validarContrasena() || !validarNombre() || !validarApellido() || !validarTelefono() || !validarDireccion()){
-            e.preventDefault();
-            e.stopPropagation();
             return false;
         } else {
-            return true;
+            fetch('/registrarse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: inNombre.value,
+                    apellido: inApellido.value,
+                    correo: inEmail.value,
+                    contrasena: inContrasena.value,
+                    telefono: inTelefono.value,
+                    direccion: inDireccion.value
+                })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.estado) {
+                    location.href = '/iniciar_sesion';
+                }else{
+                    crearModal("Error", data.mensaje, 3000, true);
+                }
+            })
+            .catch((error)=>{
+                crearModal("Error", data.mensaje, 3000, true);
+            })
         }
     }
 
