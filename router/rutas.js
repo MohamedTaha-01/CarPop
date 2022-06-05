@@ -591,6 +591,7 @@ router.post('/perfiles/:id_usuario/datos', [
         try {
             const body = req.body;
             const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
+            req.session.usuarioAutentificado = await Usuario.findById(id_usuario);
             res.status(200).json({
                 estado: true,
                 mensaje: 'Se han modificado los datos del usuario'
@@ -755,6 +756,40 @@ router.get('/contacto', (req, res)=>{
     }
 
     res.status(200).render('contacto', {autorizado, usuarioAutentificado});
+})
+
+router.post('/contacto', [
+    check('asunto', 'Debes escribir un asunto').trim().notEmpty(),
+    check('mensaje', 'Debes escribir un mensaje de 5 caracteres como mínimo').trim().notEmpty().isLength({ min: 5})
+], (req, res)=>{
+
+    const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
+
+    if (!erroresVal.isEmpty()) {
+
+        res.status(422).json({ estado: false, mensaje: stringErrores});
+
+    } else {
+
+        res.status(200).json({ estado: true, mensaje: "¡Mensaje recibido! Nos pondremos en contacto contigo lo antes posible."});
+        // sgMail.send({
+        //     to: 'carpop531@gmail.com',
+        //     from: req.body.correo,
+        //     templateId: "???",
+        //     dynamicTemplateData: {
+        //         asunto: req.body.asunto,
+        //         mensaje: req.boy.mensaje,
+        //     }
+        // }).then(() => {
+        //     res.status(200).json({ estado: true, mensaje: "¡Mensaje recibido! Nos pondremos en contacto contigo lo antes posible."});
+        // }).catch((error) => {
+        //     res.status(500).json({ estado: false, mensaje: error.toString()});
+        // })
+    }
+
 })
 
 module.exports = router;
