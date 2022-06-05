@@ -578,25 +578,27 @@ router.post('/perfiles/:id_usuario/datos', [
 
     const id_usuario = req.params.id_usuario;
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
     
     if (!erroresVal.isEmpty()) {
         
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()});
+        return res.status(422).json({estado: false, mensaje: stringErrores});
         
     } else {
         
         try {
             const body = req.body;
             const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
-            res.json({
-                editado: true,
+            res.status(200).json({
+                estado: true,
                 mensaje: 'Se han modificado los datos del usuario'
             });
         } catch (error) {
             console.log(error);
-            res.json({
-                editado: false,
+            res.status(500).json({
+                estado: false,
                 mensaje: error.toString()
             });
         }
@@ -610,11 +612,13 @@ router.post('/perfiles/:id_usuario/contrasena', [
 
     const id_usuario = req.params.id_usuario;
     const erroresVal = validationResult(req);
-    
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
+
     if (!erroresVal.isEmpty()) {
-        
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()});
+
+        res.status(422).json({ estado: false, mensaje: stringErrores});
         
     } else {
         
@@ -626,13 +630,13 @@ router.post('/perfiles/:id_usuario/contrasena', [
             const body = req.body;
             const anuncioDB = await Usuario.findByIdAndUpdate({ _id: id_usuario }, body, {useFindAndModify: false});
             res.json({
-                editado: true,
-                mensaje: 'Se ha modificado la contraseña del usuario'
+                estado: true,
+                mensaje: 'Se ha modificado la contraseña'
             });
         } catch (error) {
             console.log(error);
             res.json({
-                editado: false,
+                estado: false,
                 mensaje: error.toString()
             });
         }
