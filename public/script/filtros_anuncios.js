@@ -29,4 +29,12 @@ window.addEventListener("load", ()=>{
             document.getElementsByName("preciomax")[0].value = parametros[3];
         }
     }
+
+    document.getElementById("borrar-filtros").addEventListener("click", (e)=>{
+
+        e.preventDefault();
+        e.stopPropagation();
+        location.href = '/anuncios';
+    }); 
+
 })
