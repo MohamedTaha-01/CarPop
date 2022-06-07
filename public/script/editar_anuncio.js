@@ -1,4 +1,5 @@
 import * as validarAnuncio from '/script/validar_anuncio.js';
+import {crearModal} from './modal.js';
 
 window.addEventListener("load", function(){
 
@@ -26,15 +27,13 @@ window.addEventListener("load", function(){
     inPrecio.addEventListener("focusout", validarPrecio);
     form.addEventListener("submit", async(e)=>{
         
-        // cuando se hace submit cancelar envío de form
         e.preventDefault();
         e.stopPropagation();
 
-        if (okValidaciones()) { // ¿validaciones correctas?
+        if (okValidaciones()) {
             const id = form.dataset.id; // obtener id del anuncio siendo editado
-            // introduce values en el json del body
-            try {
-                const data = await fetch(`/admin/anuncios/${id}`, {
+
+                fetch(`/admin/anuncios/${id}`, {
                     method: 'put',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -48,21 +47,21 @@ window.addEventListener("load", function(){
                         transmision: sTransmisiones.value,
                         precio: inPrecio.value
                     })
-                });
-                const resjson = await data.json(); // json de respuesta del servidor 
-                if (resjson.editado) {
-                    console.log(resjson.mensaje);
-                    if (sIdUsuario) {
-                        window.location.href = '/admin/anuncios';
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.estado) {
+                        if (sIdUsuario) {
+                            location.href = '/admin/anuncios'
+                        } else {
+                            this.location.href = '/anuncios'
+                        }
                     }else{
-                        window.location.href = '/anuncios';
+                        crearModal("Error", data.mensaje, 3000, true);
                     }
-                } else {
-                    console.log(resjson.mensaje);
-                }
-            } catch (error) {
-                console.log(error);
-            }
+                })
+                .catch((error)=>{
+                    crearModal("Error", error.toString(), 3000, true);
+                })
         } 
     });
 
