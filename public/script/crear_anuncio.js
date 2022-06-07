@@ -1,4 +1,5 @@
 import * as validarAnuncio from '/script/validar_anuncio.js';
+import {crearModal} from './modal.js';
 
 window.addEventListener("load", function(){
 
@@ -8,8 +9,8 @@ window.addEventListener("load", function(){
     if(this.document.getElementById("lista-usuarios")==''||this.document.getElementById("lista-usuarios")==null){
         hayCampoIdUsuario=false;
     } else {
-        let sIdUsuario = this.document.getElementById("lista-usuarios");
-        let inIdUsuario = document.getElementById("in-idusuario");
+        var sIdUsuario = this.document.getElementById("lista-usuarios");
+        var inIdUsuario = document.getElementById("in-idusuario");
         hayCampoIdUsuario=true;
     }
     let inTitulo = document.getElementById("in-titulo");
@@ -149,21 +150,84 @@ window.addEventListener("load", function(){
     }
 
     function enviarFormulario(e){
-
+        
+        e.preventDefault();
+        e.stopPropagation();
         if(hayCampoIdUsuario==true){
+
             if(!validarIdUsuario() || !validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
             !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
-               e.preventDefault();
-               e.stopPropagation();
                return false;
-           } else return true;
+            } else {
+                
+                fetch('/admin/anuncios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_usuario: inIdUsuario.value,
+                        titulo: inTitulo.value,
+                        descripcion: inDescripcion.value,
+                        img: inImagen.value,
+                        matricula: inMatricula.value,
+                        marca: sMarcas.value,
+                        modelo: sModelos.value,
+                        combustible: sCombustibles.value,
+                        transmision: sTransmisiones.value,
+                        precio: inPrecio.value
+                    })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.estado) {
+                        location.href = '/admin/anuncios'
+                    }else{
+                        crearModal("Error", data.mensaje, 3000, true);
+                    }
+                })
+                .catch((error)=>{
+                    crearModal("Error", data.mensaje, 3000, true);
+                })
+
+            };
+
         } else {
+
             if(!validarTitulo() || !validarDescripcion() || !validarMatricula() || !validarMarca() ||
-         !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        } else return true;
+            !validarModelo() || !validarCombustible() || !validarTransmision() || !validarPrecio()){
+                return false;
+            } else {
+
+                fetch('/crear_anuncio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        titulo: inTitulo.value,
+                        descripcion: inDescripcion.value,
+                        img: inImagen.value,
+                        matricula: inMatricula.value,
+                        marca: sMarcas.value,
+                        modelo: sModelos.value,
+                        combustible: sCombustibles.value,
+                        transmision: sTransmisiones.value,
+                        precio: inPrecio.value
+                    })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.estado) {
+                        crearModal("Anuncio creado", data.mensaje, 3000, true);
+                    }else{
+                        crearModal("Error", data.mensaje, 3000, true);
+                    }
+                })
+                .catch((error)=>{
+                    crearModal("Error", data.mensaje, 3000, true);
+                })
+
+            };
+
         }
         
     }

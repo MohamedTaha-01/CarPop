@@ -473,8 +473,6 @@ router.get('/crear_anuncio', isAuth, async(req,res)=>{
 
 });
 router.post('/crear_anuncio', [
-    // Validación servidor
-    // ! falta validar imágen
     check('titulo', 'Título no válido').trim().escape().isLength({ min: 3, max:50}),
     check('descripcion', 'Descripción no válida').trim().escape().isLength({ min: 3, max:300}),
     check('matricula', 'Matrícula no válida').matches(/^\d{4}[A-Z]{3}$/).custom(async (matricula) => {
@@ -483,61 +481,44 @@ router.post('/crear_anuncio', [
             throw new Error('La matrícula ya está en uso')
         }
     }),
+    check('marca', 'Debes seleccionar una marca').trim().notEmpty(),
+    check('modelo', 'Debes seleccionar un modelo').trim().notEmpty(),
     check('combustible', 'Tipo de combustible no válido').isIn(['Gasolina', 'Diésel', 'Eléctrico', 'Híbrido']),
     check('transmision', 'Tipo de transmisión no válido').isIn(['Manual', 'Automático']),
     check('precio', 'Precio no válido').isInt({ gt: 0, lt:1000})
 ], async(req,res)=>{
 
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
+
     if (!erroresVal.isEmpty()) {
-        // si hay errores enviar un json con los errores
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()});
+        
+        return res.status(422).json({estado: false, mensaje: stringErrores});
+        
     } else {
-        // si no hay errores crear anuncio
-        req.body.id_usuario = req.session.usuarioAutentificado._id; // asignar el id del usuario autentificado en la sesión
+        
+        req.body.id_usuario = req.session.usuarioAutentificado._id;
         req.body.creado = new Date();
         const body = req.body;
         try {
             const anuncioDB = new Anuncio(body);
             await anuncioDB.save();
-            res.redirect('/');
+            res.status(200).json({
+                estado: true,
+                mensaje: 'Se ha creado el anuncio'
+            });
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error: '+error.toString()
+            });
         }
     }
 });
 
 //* Perfiles //
-
-// router.get('/perfiles/:id_usuario', isAuth, async (req, res)=>{
-
-//     if (req.session.isAuth) {
-//         autorizado = true;
-//         usuarioAutentificado = req.session.usuarioAutentificado;
-//     } else {
-//         autorizado = false;
-//         usuarioAutentificado = null;
-//     }
-
-//     const id_usuario = req.params.id_usuario;
-//     try {
-//         const usuarioDB = await Usuario.findById(id_usuario);
-//         res.render("perfil", {
-//             usuario: usuarioDB, 
-//             error: false,
-//             autorizado,
-//             usuarioAutentificado
-//         });
-//     } catch (e) {
-//         res.render("perfil", {
-//             error: true, 
-//             mensaje: "No se ha encontrado el anuncio especificado",
-//             autorizado, 
-//             usuarioAutentificado
-//         });
-//     }
-// });
 
 router.get('/perfiles/:id_usuario/datos', isAuth, async (req, res)=>{
 
