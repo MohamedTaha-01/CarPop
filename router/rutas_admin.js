@@ -48,8 +48,6 @@ router.get('/anuncios/crear', esAdmin, async(req, res)=>{
     
 });
 router.post('/anuncios', [
-    // Validación servidor
-    // ! falta validar imágen
     check('id_usuario', 'ID de usuario no válida').notEmpty().isLength({min: 12, max:50}),
     check('titulo', 'Título no válido').trim().escape().isLength({ min: 3, max:50}),
     check('descripcion', 'Descripción no válida').trim().escape().isLength({ min: 3, max:300}),
@@ -59,26 +57,38 @@ router.post('/anuncios', [
             throw new Error('La matrícula ya está en uso')
         }
     }),
+    check('marca', 'Debes seleccionar una marca').trim().notEmpty(),
+    check('modelo', 'Debes seleccionar un modelo').trim().notEmpty(),
     check('combustible', 'Tipo de combustible no válido').isIn(['Gasolina', 'Diésel', 'Eléctrico', 'Híbrido']),
     check('transmision', 'Tipo de transmisión no válido').isIn(['Manual', 'Automático']),
     check('precio', 'Precio no válido').isInt({ gt: 0, lt:1000})
 ], async(req,res)=>{
 
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
+
     if (!erroresVal.isEmpty()) {
-        // si hay errores enviar un json con los errores
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()});
+        
+        return res.status(422).json({estado: false, mensaje: stringErrores});
+
     } else {
-        // si no hay errores crear anuncio
+        
         req.body.creado = new Date();
         const body = req.body;
         try {
             const anuncioDB = new Anuncio(body);
             await anuncioDB.save();
-            res.redirect('/admin/anuncios');
+            res.status(500).json({
+                estado: true,
+                mensaje: "Anuncio creado"
+            });
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error: '+error.toString()
+            });
         }
     }
 });
@@ -135,25 +145,29 @@ router.put('/anuncios/:id_anuncio', [
 ],async(req,res)=>{
 
     const erroresVal = validationResult(req);
+    var stringErrores = erroresVal.errors.map(function(error) {
+        return " "+error['msg'];
+    });
+
     if (!erroresVal.isEmpty()) {
-        // si hay errores enviar un json con los errores
-        console.log(erroresVal);
-        return res.status(422).json({erroresVal: erroresVal.array()}); //! res.json no se envía al js cliente, se envía al ejs. JS muestra undefined
+        
+        return res.status(422).json({estado: false, mensaje: stringErrores});
+
     } else {
-        // si no hay errores editar anuncio
+        
         const id_anuncio = req.params.id_anuncio;
         req.body.id_usuario = req.body.id_usuario.trim();
         const body = req.body;
         try {
             const anuncioDB = await Anuncio.findByIdAndUpdate(id_anuncio, body, {useFindAndModify: false});
-            res.json({
-                editado: true,
+            res.status(200).json({
+                estado: true,
                 mensaje: 'Se ha editado el anuncio'
             });
         } catch (error) {
-            console.log(error);
-            res.json({
-                editado: false,
+
+            res.status(500).json({
+                estado: false,
                 mensaje: error.toString()
             });
         }
