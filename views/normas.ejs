@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('./plantilla/cabecera', {tituloWeb: 'CarPop - Normas de uso'}) %>
+<body>
+
+    <header><%- include('./plantilla/nav', {autorizado, usuarioAutentificado}); %></header>
+    
+    <div class="p-2 container py-5 mt-2" style="margin-bottom: 50vh !important;">
+        <div class="row pt-5">
+            <div class="col-10 col-lg-9 p-5 mb-2 px-md-5 mx-auto">
+                <section class="py-3">
+                    <div class="h3 text-center">Normas de uso</div>
+                </section>
+                <section class="py-2 text-center">
+                    <p>Echa un vistazo a nuestras normas</p>
+                </section>
+                <section class="py-2 d-flex flex-row justify-content-center">
+                    <ul class="list-group list-group-flush border">
+                        <li class="list-group-item bg-dark text-light">El vehículo alquilado se debe devolver antes de la finalización de la reserva</li>
+                        <li class="list-group-item bg-light text-dark">El vehículo devuelto debe estar en las mismas condiciones que cuando se recogió</li>
+                        <li class="list-group-item bg-dark text-light">El vehículo devuelto debe tener el mismo nivel de combustible que cuando se recogió</li>
+                        <li class="list-group-item bg-light text-dark">Queda prohibido fumar en los vehículos a menos que el propietario lo autorice</li>
+                      </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <footer><%- include('./plantilla/pie'); %></footer>
+    <script src="/script/ir_arriba.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
