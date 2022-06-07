@@ -40,9 +40,9 @@
                                         <td>
                                             <% usuarios.forEach(usuario => { %>
                                                 <% if (usuario._id == anuncio.id_usuario) { %>
-                                                    <a href="usuarios/<%= anuncio.id_usuario %>" class="link-dark ">
+                                                    <!-- <a href="usuarios/<%= anuncio.id_usuario %>" class="link-dark "> -->
                                                         <%= `${usuario.nombre}\xa0${usuario.apellido}` %>
-                                                    </a>
+                                                    <!-- </a> -->
                                                 <% } %>
                                             <% }) %>
                                         </td>
