@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const {check, validationResult} = require('express-validator');
+const {check, validationResult, body} = require('express-validator');
 const { findById } = require('../modelo/Anuncio');
 require('dotenv').config();
 const bodyParser = require('body-parser');
@@ -755,20 +755,21 @@ router.post('/contacto', [
 
     } else {
 
-        res.status(200).json({ estado: true, mensaje: "¡Mensaje recibido! Nos pondremos en contacto contigo lo antes posible."});
-        // sgMail.send({
-        //     to: 'carpop531@gmail.com',
-        //     from: req.body.correo,
-        //     templateId: "???",
-        //     dynamicTemplateData: {
-        //         asunto: req.body.asunto,
-        //         mensaje: req.boy.mensaje,
-        //     }
-        // }).then(() => {
-        //     res.status(200).json({ estado: true, mensaje: "¡Mensaje recibido! Nos pondremos en contacto contigo lo antes posible."});
-        // }).catch((error) => {
-        //     res.status(500).json({ estado: false, mensaje: error.toString()});
-        // })
+        sgMail.send({
+            to: 'carpop531@gmail.com',
+            from: 'carpop531@gmail.com',
+            templateId: "d-d77be5d9969e446782785ef26c0f182f",
+            dynamicTemplateData: {
+                asunto: req.body.asunto,
+                mensaje: req.body.mensaje,
+                nombreap: req.body.nombreap,
+                correo: req.body.correo
+            }
+        }).then(() => {
+            res.status(200).json({ estado: true, mensaje: "¡Mensaje enviado! Nos pondremos en contacto contigo lo antes posible."});
+        }).catch((error) => {
+            res.status(500).json({ estado: false, mensaje: error.toString()});
+        })
     }
 
 })
